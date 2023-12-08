@@ -13,7 +13,7 @@ public class Profile
     }
 
     public Monitor Monitor { get; }
-    public string Name { get; }
+    public string Name { get; set; }
     public ProfileSetting ProfileSetting { get; }
     public bool IsActive { get; set; }
     public bool IsDefault { get; set; }

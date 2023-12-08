@@ -21,7 +21,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private readonly IEventAggregator _eventAggregator;
     private readonly MonitorViewModelFactory _monitorViewModelFactory;
     private readonly ProfileFactory _profileFactory;
-    private readonly ProfileNameViewModelFactory _profileNameViewModelFactory;
+    private readonly IProfileNameViewModelFactory _profileNameViewModelFactory;
     private readonly IProfileViewModelFactory _profileViewModelFactory;
     private readonly WindowManager _windowManager;
     private ObservableCollection<MonitorViewModel> _monitors;
@@ -35,7 +35,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         IEventAggregator eventAggregator,
         MonitorViewModelFactory monitorViewModelFactory,
         DataController dataController, IProfileViewModelFactory profileViewModelFactory, ProfileFactory profileFactory,
-        WindowManager windowManager, ProfileNameViewModelFactory profileNameViewModelFactory)
+        WindowManager windowManager, IProfileNameViewModelFactory profileNameViewModelFactory)
     {
         _eventAggregator = eventAggregator;
         _monitorViewModelFactory = monitorViewModelFactory;

@@ -29,6 +29,7 @@
             <ItemsControl
                 HorizontalAlignment="Center"
                 Margin="2,2,2,0"
+                MaxWidth="600"
                 IsTabStop="False"
                 ItemsSource="{Binding Monitors, Mode=OneWay}">
                 <ItemsControl.ItemTemplate>

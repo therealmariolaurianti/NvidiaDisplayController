@@ -118,6 +118,7 @@
             HorizontalAlignment="Center"
             Grid.Row="3">
             <Button
+                Name="Apply"
                 IsEnabled="{Binding CanApply}"
                 Height="30"
                 Width="75"

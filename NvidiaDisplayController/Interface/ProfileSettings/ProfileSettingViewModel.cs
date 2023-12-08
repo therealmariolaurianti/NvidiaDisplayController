@@ -16,15 +16,9 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
         IsDefault = isDefault;
         _eventAggregator = eventAggregator;
         ProfileSetting = profileSetting;
-        
+
         SetOriginalSettings(profileSetting);
         _eventAggregator.SubscribeOnPublishedThread(this);
-    }
-
-    private void SetOriginalSettings(ProfileSetting profileSetting)
-    {
-        _originalSettings = new ProfileSetting(profileSetting.Brightness, profileSetting.Contrast,
-            profileSetting.Gamma, profileSetting.DigitalVibrance);
     }
 
     public ProfileSetting ProfileSetting { get; }
@@ -75,6 +69,7 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
             if (value.Equals(ProfileSetting.DigitalVibrance)) return;
             ProfileSetting.DigitalVibrance = value;
             NotifyOfPropertyChange();
+            Publish();
         }
     }
 
@@ -89,8 +84,14 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
         _resetting = false;
 
         Publish(false);
-        
+
         await Task.CompletedTask;
+    }
+
+    private void SetOriginalSettings(ProfileSetting profileSetting)
+    {
+        _originalSettings = new ProfileSetting(profileSetting.Brightness, profileSetting.Contrast,
+            profileSetting.Gamma, profileSetting.DigitalVibrance);
     }
 
     private void Publish(bool value = true)

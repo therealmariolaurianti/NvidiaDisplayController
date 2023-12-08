@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -10,6 +11,7 @@ using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
 using WindowsDisplayAPI;
+using Display = NvAPIWrapper.Display.Display;
 
 namespace NvidiaDisplayController.Interface.Shell;
 
@@ -23,8 +25,10 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private readonly IProfileViewModelFactory _profileViewModelFactory;
     private readonly WindowManager _windowManager;
     private ObservableCollection<MonitorViewModel> _monitors;
+    private List<Display> _nvidiaDisplays;
     private bool _profileSettingsIsDirty;
     private MonitorViewModel? _selectedMonitor;
+    private Display? _selectedNvidiaMonitor;
     private ProfileViewModel? _selectedProfile;
 
     public ShellViewModel(
@@ -103,6 +107,17 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     public bool CanApply => SelectedProfile is not null;
     public bool CanAddNewProfile => SelectedMonitor is not null;
 
+    public Display? SelectedNvidiaMonitor
+    {
+        get => _selectedNvidiaMonitor;
+        set
+        {
+            if (Equals(value, _selectedNvidiaMonitor)) return;
+            _selectedNvidiaMonitor = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
     public async Task HandleAsync(ProfileSettingsEvent message, CancellationToken cancellationToken)
     {
         ProfileSettingsIsDirty = message.IsDirty;
@@ -124,6 +139,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
             Monitors.Add(monitorViewModel);
         }
+
+        _nvidiaDisplays = Display.GetDisplays().ToList();
     }
 
     private void WireProfileEvents(ProfileViewModel profileViewModel)
@@ -160,6 +177,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         SetMonitorState(selectedMonitor, !isSelected);
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
+        SelectedNvidiaMonitor =
+            _nvidiaDisplays.Single(d => d.Name == SelectedMonitor!.Display.DisplayScreen.ScreenName);
 
         SelectedProfile = SelectedMonitor?.Profiles.Single(p => p.IsDefault);
         if (SelectedProfile is not null)
@@ -184,7 +203,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             WireProfileEvents(profileViewModel);
             SelectedMonitor?.Profiles.Add(profileViewModel);
             Write();
-            
+
             SelectedProfile = profileViewModel;
             SelectedProfile.IsSelected = true;
         }
@@ -209,9 +228,10 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         ProfileSettingsIsDirty = false;
     }
 
-    private void UpdateColorSettings(Display display, ProfileSetting profileSetting)
+    private void UpdateColorSettings(WindowsDisplayAPI.Display display, ProfileSetting profileSetting)
     {
         display.GammaRamp =
             new DisplayGammaRamp(profileSetting.Brightness, profileSetting.Contrast, profileSetting.Gamma);
+        SelectedNvidiaMonitor!.DigitalVibranceControl.NormalizedLevel = (profileSetting.DigitalVibrance - .3);
     }
 }

@@ -30,11 +30,21 @@ public class ProfileViewModel : Screen
     public Action<Guid> ProfileRemoved { get; set; }
     public string Name => Profile.Name;
     public Guid Guid { get; }
-
     public ProfileSettingViewModel ProfileSettings { get; set; }
 
     public ContextMenu ContextMenu { get; set; }
     public MonitorViewModel MonitorViewModel { get; set; }
+
+    public new bool IsActive
+    {
+        get => Profile.IsActive;
+        set
+        {
+            if (value == Profile.IsActive) return;
+            Profile.IsActive = value;
+            NotifyOfPropertyChange();
+        }
+    }
 
     public bool IsSelected
     {
@@ -74,6 +84,11 @@ public class ProfileViewModel : Screen
     private void OnRemoveClicked(object sender, RoutedEventArgs e)
     {
         ProfileRemoved.Invoke(Guid);
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
     }
 
     public void UnSelect()

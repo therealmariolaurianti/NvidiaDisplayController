@@ -164,7 +164,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
         SelectedMonitor.Monitor.Profiles.Remove(profileViewModel.Profile);
         SelectedMonitor?.Profiles.Remove(profileViewModel);
-        
+
         NotifyOfPropertyChange(nameof(CanAddNewProfile));
 
         Write();
@@ -208,7 +208,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
             SelectedProfile = profileViewModel;
             SelectedProfile.IsSelected = true;
-            
+
             NotifyOfPropertyChange(nameof(CanAddNewProfile));
         }
     }
@@ -216,9 +216,17 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     public void Apply()
     {
         UpdateColorSettings(SelectedMonitor!.Display, SelectedProfile!.ProfileSettings.ProfileSetting);
+        SetActiveProfile();
         Write();
 
         ProfileSettingsIsDirty = false;
+    }
+
+    private void SetActiveProfile()
+    {
+        SelectedProfile!.IsActive = true;
+        foreach (var profileViewModel in SelectedMonitor!.Profiles.Where(p => p.Guid != SelectedProfile.Guid))
+            profileViewModel.Deactivate();
     }
 
     public void Revert()
@@ -238,16 +246,14 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         display.GammaRamp =
             new DisplayGammaRamp(profileSetting.Brightness, profileSetting.Contrast, profileSetting.Gamma);
-        SelectedNvidiaMonitor!.DigitalVibranceControl.NormalizedLevel = (profileSetting.DigitalVibrance - .3);
+        SelectedNvidiaMonitor!.DigitalVibranceControl.NormalizedLevel = profileSetting.DigitalVibrance - .3;
     }
 
     public void OpenHelp()
     {
-        
     }
 
     public void OpenDonation()
     {
-        
     }
 }

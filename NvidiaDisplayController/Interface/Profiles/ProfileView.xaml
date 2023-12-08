@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:profiles="clr-namespace:NvidiaDisplayController.Interface.Profiles"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBinding"
              mc:Ignorable="d"
              Height="75"
              Width="100"
@@ -14,9 +16,31 @@
         BorderThickness="1">
         <ToggleButton
             Style="{DynamicResource MetroCircleToggleButtonStyle}"
-            Content="{Binding Name}"
             IsChecked="{Binding IsSelected}"
             FontSize="16"
-            FontWeight="Bold" />
+            FontWeight="Bold">
+            <Grid
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Text="{Binding Name}"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    TextAlignment="Center" />
+                <iconPacks:PackIconModern
+                    Grid.Row="1"
+                    Width="10"
+                    Height="10"
+                    Visibility="{calcBinding:Binding IsActive}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Kind="Star" />
+            </Grid>
+        </ToggleButton>
     </Border>
 </UserControl>

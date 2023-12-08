@@ -51,7 +51,7 @@ public class Bootstrapper : BootstrapperBase
     protected override void OnStartup(object sender, StartupEventArgs e)
     {
         _kernel.Bind<IWindowManager>().To<WindowManager>();
-        _kernel.Bind<IEventAggregator>().To<EventAggregator>();
+        _kernel.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
 
         _kernel.Bind(x => x.FromThisAssembly()
             .SelectAllInterfaces()

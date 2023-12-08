@@ -13,18 +13,17 @@ using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Interface.Shell;
 
-public class ShellViewModel : Screen, IHandle<ProfileSettingsEvent>
+public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 {
     private readonly DataController _dataController;
+    private readonly IEventAggregator _eventAggregator;
     private readonly MonitorViewModelFactory _monitorViewModelFactory;
     private readonly ProfileFactory _profileFactory;
     private readonly ProfileNameViewModelFactory _profileNameViewModelFactory;
     private readonly IProfileViewModelFactory _profileViewModelFactory;
-
     private readonly WindowManager _windowManager;
-
-    private Guid _lastSelectedProfile;
     private ObservableCollection<MonitorViewModel> _monitors;
+    private bool _profileSettingsIsDirty;
     private MonitorViewModel? _selectedMonitor;
     private ProfileViewModel? _selectedProfile;
 
@@ -34,6 +33,7 @@ public class ShellViewModel : Screen, IHandle<ProfileSettingsEvent>
         DataController dataController, IProfileViewModelFactory profileViewModelFactory, ProfileFactory profileFactory,
         WindowManager windowManager, ProfileNameViewModelFactory profileNameViewModelFactory)
     {
+        _eventAggregator = eventAggregator;
         _monitorViewModelFactory = monitorViewModelFactory;
         _dataController = dataController;
         _profileViewModelFactory = profileViewModelFactory;
@@ -41,7 +41,7 @@ public class ShellViewModel : Screen, IHandle<ProfileSettingsEvent>
         _windowManager = windowManager;
         _profileNameViewModelFactory = profileNameViewModelFactory;
 
-        eventAggregator.SubscribeOnPublishedThread(this);
+        _eventAggregator.SubscribeOnPublishedThread(this);
 
         Start();
     }
@@ -88,7 +88,17 @@ public class ShellViewModel : Screen, IHandle<ProfileSettingsEvent>
         }
     }
 
-    public bool ProfileSettingsIsDirty { get; set; }
+    public bool ProfileSettingsIsDirty
+    {
+        get => _profileSettingsIsDirty;
+        set
+        {
+            if (value == _profileSettingsIsDirty) return;
+            _profileSettingsIsDirty = value;
+            NotifyOfPropertyChange();
+            NotifyOfPropertyChange(nameof(CanApply));
+        }
+    }
 
     public bool CanApply => SelectedProfile is not null && ProfileSettingsIsDirty;
     public bool CanAddNewProfile => SelectedMonitor is not null;
@@ -127,6 +137,8 @@ public class ShellViewModel : Screen, IHandle<ProfileSettingsEvent>
         SelectedProfile = SelectedMonitor!.Profiles.Single(p => p.Guid == guid);
         foreach (var profileViewModel in SelectedMonitor.Profiles.Where(p => p.Guid != guid))
             profileViewModel.UnSelect();
+
+        ProfileSettingsIsDirty = false;
     }
 
     private void OnProfileRemoved(Guid guid)

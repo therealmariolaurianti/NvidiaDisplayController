@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using Caliburn.Micro;
 using NvidiaDisplayController.Data;
@@ -132,10 +133,10 @@ public class ShellViewModel : Screen
     {
         SetMonitorState(selectedMonitor, !isSelected);
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
-        if (SelectedProfile is null)
-            return;
-
-        SelectedProfile = null;
+        
+        SelectedProfile = SelectedMonitor?.Profiles.Single(p => p.IsDefault);
+        if(SelectedProfile is not null)
+            SelectedProfile.IsSelected = true;
     }
 
     private void SetMonitorState(Guid selectedMonitor, bool isEnabled)

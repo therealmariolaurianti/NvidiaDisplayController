@@ -45,6 +45,7 @@ public class ProfileViewModel : Screen
     }
 
     public Action<Guid> IsSelectedChanged { get; set; }
+    public bool IsDefault => Profile.IsDefault;
 
     private void CreateContextMenu()
     {
@@ -68,7 +69,9 @@ public class ProfileViewModel : Screen
     public void UnSelect()
     {
         _callEvent = false;
-        IsSelected = false;
+        {
+            IsSelected = false;
+        }
         _callEvent = true;
     }
 }

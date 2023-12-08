@@ -178,7 +178,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SetMonitorState(selectedMonitor, !isSelected);
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
         SelectedNvidiaMonitor =
-            _nvidiaDisplays.Single(d => d.Name == SelectedMonitor!.Display.DisplayScreen.ScreenName);
+            _nvidiaDisplays.SingleOrDefault(d => d.Name == SelectedMonitor?.Display.DisplayScreen.ScreenName);
 
         SelectedProfile = SelectedMonitor?.Profiles.Single(p => p.IsDefault);
         if (SelectedProfile is not null)
@@ -213,6 +213,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         UpdateColorSettings(SelectedMonitor!.Display, SelectedProfile!.ProfileSettings.ProfileSetting);
         Write();
+
+        ProfileSettingsIsDirty = false;
     }
 
     public void Revert()

@@ -7,13 +7,13 @@
              xmlns:shell="clr-namespace:NvidiaDisplayController.Interface.Shell"
              xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBinding"
              mc:Ignorable="d"
-             Height="450"
+             MinHeight="450"
              Width="600"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance shell:ShellViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="110" />
+            <RowDefinition MinHeight="110" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -65,6 +65,7 @@
                 <ItemsControl
                     HorizontalAlignment="Left"
                     Margin="2,2,2,0"
+                    MaxWidth="600"
                     IsTabStop="False"
                     ItemsSource="{Binding SelectedMonitor.Profiles, Mode=OneWay}">
                     <ItemsControl.ItemTemplate>

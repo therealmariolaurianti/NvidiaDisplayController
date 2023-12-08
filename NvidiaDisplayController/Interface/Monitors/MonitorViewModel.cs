@@ -5,6 +5,7 @@ using System.Linq;
 using Caliburn.Micro;
 using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects;
+using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Interface.Monitors;
 
@@ -23,6 +24,7 @@ public class MonitorViewModel : Screen
     }
 
     public Monitor Monitor { get; }
+    public Display Display => Display.GetDisplays().Single(d => d.DevicePath == Monitor.DisplayDevicePath);
 
     public string Name => Monitor.Name;
     public Size Resolution => Monitor.Resolution;

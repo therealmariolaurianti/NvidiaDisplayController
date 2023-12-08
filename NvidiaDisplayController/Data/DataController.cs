@@ -38,6 +38,7 @@ public class DataController
             var json = reader.ReadToEnd();
             var monitors = JsonConvert.DeserializeObject<List<Monitor>>(json);
             reader.Close();
+            
             return monitors;
         }
     }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using Caliburn.Micro;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects.Factories;
+using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Interface.Shell;
 
@@ -133,9 +133,9 @@ public class ShellViewModel : Screen
     {
         SetMonitorState(selectedMonitor, !isSelected);
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
-        
+
         SelectedProfile = SelectedMonitor?.Profiles.Single(p => p.IsDefault);
-        if(SelectedProfile is not null)
+        if (SelectedProfile is not null)
             SelectedProfile.IsSelected = true;
     }
 
@@ -163,13 +163,16 @@ public class ShellViewModel : Screen
 
     public void Apply()
     {
+        UpdateColorSettings(SelectedMonitor!.Display, SelectedProfile!.ProfileSettings.Brightness,
+            SelectedProfile.ProfileSettings.Contrast, SelectedProfile.ProfileSettings.Gamma);
+
         Write();
     }
 
-    // private void UpdateColorSettings(Display display,
-    //     double brightness = 0.5, double contrast = 0.5, double gamma = 1)
-    // {
-    //     var newGamma = new DisplayGammaRamp(brightness, contrast, gamma);
-    //     display.GammaRamp = newGamma;
-    // }
+    private void UpdateColorSettings(Display display,
+        double brightness = 0.5, double contrast = 0.5, double gamma = 1)
+    {
+        var newGamma = new DisplayGammaRamp(brightness, contrast, gamma);
+        display.GammaRamp = newGamma;
+    }
 }

@@ -74,7 +74,7 @@ public class Bootstrapper : BootstrapperBase
             var frequency = display.DisplayScreen.CurrentSetting.Frequency;
             var displaySource = pathDisplayTargets.Single(pds => pds.DevicePath == display.DevicePath);
 
-            var monitor = _monitorFactory.CreateDefault(displaySource.FriendlyName,
+            var monitor = _monitorFactory.CreateDefault(display.DevicePath, displaySource.FriendlyName,
                 resolution, frequency);
 
             monitors.Add(monitor);

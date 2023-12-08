@@ -86,8 +86,8 @@
                 VerticalAlignment="Center"
                 Minimum="0"
                 Maximum="2.8"
-                SmallChange=".1"
-                LargeChange=".10" />
+                SmallChange=".01"
+                LargeChange=".01" />
             <TextBlock
                 Text=" + " />
             <TextBlock

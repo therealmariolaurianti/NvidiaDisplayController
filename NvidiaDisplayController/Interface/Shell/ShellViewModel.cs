@@ -240,4 +240,14 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             new DisplayGammaRamp(profileSetting.Brightness, profileSetting.Contrast, profileSetting.Gamma);
         SelectedNvidiaMonitor!.DigitalVibranceControl.NormalizedLevel = (profileSetting.DigitalVibrance - .3);
     }
+
+    public void OpenHelp()
+    {
+        
+    }
+
+    public void OpenDonation()
+    {
+        
+    }
 }

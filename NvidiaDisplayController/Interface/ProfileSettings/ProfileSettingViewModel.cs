@@ -24,7 +24,7 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
     private void SetOriginalSettings(ProfileSetting profileSetting)
     {
         _originalSettings = new ProfileSetting(profileSetting.Brightness, profileSetting.Contrast,
-            profileSetting.Gamma);
+            profileSetting.Gamma, profileSetting.DigitalVibrance);
     }
 
     public ProfileSetting ProfileSetting { get; }
@@ -64,6 +64,17 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
             ProfileSetting.Gamma = value;
             NotifyOfPropertyChange();
             Publish();
+        }
+    }
+
+    public double DigitalVibrance
+    {
+        get => ProfileSetting.DigitalVibrance;
+        set
+        {
+            if (value.Equals(ProfileSetting.DigitalVibrance)) return;
+            ProfileSetting.DigitalVibrance = value;
+            NotifyOfPropertyChange();
         }
     }
 

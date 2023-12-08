@@ -13,6 +13,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -22,6 +24,7 @@
         <Label
             Grid.Row="0"
             Grid.Column="0"
+            VerticalAlignment="Center"
             Content="Brightness" />
         <StackPanel
             Grid.Row="0"
@@ -47,6 +50,7 @@
         <Label
             Grid.Row="1"
             Grid.Column="0"
+            VerticalAlignment="Center"
             Content="Contrast" />
         <StackPanel
             Grid.Row="1"
@@ -72,6 +76,7 @@
         <Label
             Grid.Row="2"
             Grid.Column="0"
+            VerticalAlignment="Center"
             Content="Gamma" />
         <StackPanel
             Grid.Row="2"
@@ -92,6 +97,32 @@
                 Text=" + " />
             <TextBlock
                 Text="{Binding Gamma, StringFormat=n2}"
+                Margin="5,0,0,0" />
+        </StackPanel>
+        <Label
+            Grid.Row="0"
+            Grid.Column="2"
+            VerticalAlignment="Center"
+            Content="Digital Vibrance" />
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="3"
+            Orientation="Horizontal"
+            VerticalAlignment="Center">
+            <Slider
+                Width="100"
+                Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                Value="{Binding DigitalVibrance}"
+                VerticalAlignment="Center"
+                Minimum="0"
+                Maximum="1"
+                SmallChange=".01"
+                LargeChange=".01" />
+            <TextBlock
+                Text=" + " />
+            <TextBlock
+                Text="{Binding DigitalVibrance, StringFormat=p0}"
                 Margin="5,0,0,0" />
         </StackPanel>
     </Grid>

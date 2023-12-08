@@ -184,7 +184,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             WireProfileEvents(profileViewModel);
             SelectedMonitor?.Profiles.Add(profileViewModel);
             Write();
+            
             SelectedProfile = profileViewModel;
+            SelectedProfile.IsSelected = true;
         }
     }
 

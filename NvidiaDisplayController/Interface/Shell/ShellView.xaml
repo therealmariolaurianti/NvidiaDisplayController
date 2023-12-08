@@ -40,7 +40,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" MinHeight="130" />
             <RowDefinition Height="175" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <GroupBox
             Margin="2"
@@ -153,26 +153,23 @@
             <Button
                 Name="Apply"
                 IsEnabled="{Binding CanApply}"
-                Height="30"
                 Grid.Column="0"
                 Width="75"
-                Margin="5,5,5,0"
+                Margin="5"
                 Content="Apply" />
             <Button
                 Name="Update"
                 IsEnabled="{Binding ProfileSettingsIsDirty}"
-                Height="30"
                 Grid.Column="1"
                 Width="75"
-                Margin="5,5,5,0"
+                Margin="5"
                 Content="Update" />
             <Button
                 Name="Revert"
                 IsEnabled="{Binding ProfileSettingsIsDirty}"
-                Height="30"
                 Width="75"
                 Grid.Column="2"
-                Margin="5,5,5,0"
+                Margin="5"
                 Content="Revert" />
         </Grid>
     </Grid>

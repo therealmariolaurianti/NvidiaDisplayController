@@ -8,6 +8,7 @@
              Width="175"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance monitors:MonitorViewModel}">
     <ToggleButton
+        Style="{DynamicResource MetroCircleToggleButtonStyle}"
         IsEnabled="{Binding IsEnabled}"
         IsChecked="{Binding IsSelected}">
         <ToggleButton.Content>
@@ -28,10 +29,11 @@
                     VerticalAlignment="Center"
                     Grid.Column="0"
                     Grid.Row="0" />
-                <TextBox
+                <TextBlock
                     Text="{Binding Name, Mode=OneWay}"
-                    VerticalContentAlignment="Center"
-                    BorderThickness="0"
+                    TextAlignment="Center"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     Background="Transparent"
                     IsEnabled="False"
                     FontWeight="Bold"
@@ -43,10 +45,11 @@
                     VerticalAlignment="Center"
                     Grid.Column="0"
                     Grid.Row="1" />
-                <TextBox
+                <TextBlock
                     Text="{Binding Resolution.Width, Mode=OneWay}"
-                    VerticalContentAlignment="Center"
-                    BorderThickness="0"
+                    TextAlignment="Center"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     Background="Transparent"
                     IsEnabled="False"
                     FontWeight="Bold"
@@ -58,10 +61,11 @@
                     VerticalAlignment="Center"
                     Grid.Column="0"
                     Grid.Row="2" />
-                <TextBox
+                <TextBlock
                     Text="{Binding Resolution.Height, Mode=OneWay}"
-                    VerticalContentAlignment="Center"
-                    BorderThickness="0"
+                    TextAlignment="Center"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     Background="Transparent"
                     IsEnabled="False"
                     FontWeight="Bold"
@@ -73,10 +77,11 @@
                     VerticalAlignment="Center"
                     Grid.Column="0"
                     Grid.Row="3" />
-                <TextBox
+                <TextBlock
                     Text="{Binding Frequency, Mode=OneWay}"
-                    VerticalContentAlignment="Center"
-                    BorderThickness="0"
+                    TextAlignment="Center"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     Background="Transparent"
                     IsEnabled="False"
                     FontWeight="Bold"

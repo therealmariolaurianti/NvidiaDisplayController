@@ -63,7 +63,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     public override string DisplayName
     {
-        get => "Monitor Color Adjuster";
+        get => "Adjust Displays";
         set { }
     }
 
@@ -105,7 +105,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     }
 
     public bool CanApply => SelectedProfile is not null;
-    public bool CanAddNewProfile => SelectedMonitor is not null;
+    public bool CanAddNewProfile => SelectedMonitor is not null && SelectedMonitor.Profiles.Count < 5;
 
     public Display? SelectedNvidiaMonitor
     {
@@ -164,6 +164,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
         SelectedMonitor.Monitor.Profiles.Remove(profileViewModel.Profile);
         SelectedMonitor?.Profiles.Remove(profileViewModel);
+        
+        NotifyOfPropertyChange(nameof(CanAddNewProfile));
 
         Write();
     }
@@ -206,6 +208,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
             SelectedProfile = profileViewModel;
             SelectedProfile.IsSelected = true;
+            
+            NotifyOfPropertyChange(nameof(CanAddNewProfile));
         }
     }
 

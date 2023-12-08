@@ -13,6 +13,7 @@
         BorderBrush="Black"
         BorderThickness="1">
         <ToggleButton
+            Style="{DynamicResource MetroCircleToggleButtonStyle}"
             Content="{Binding Name}"
             IsChecked="{Binding IsSelected}"
             FontSize="16"

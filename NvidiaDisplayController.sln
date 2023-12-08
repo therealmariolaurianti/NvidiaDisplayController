@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NvidiaDisplayController", "NvidiaDisplayController\NvidiaDisplayController.csproj", "{67FE0A57-27F9-4945-9A94-CEF4E6A12D4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsDisplayAPI", "..\..\Downloads\WindowsDisplayAPI-master\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj", "{53E0AE07-368B-4FF3-8F7A-8263A1B1A885}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67FE0A57-27F9-4945-9A94-CEF4E6A12D4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67FE0A57-27F9-4945-9A94-CEF4E6A12D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67FE0A57-27F9-4945-9A94-CEF4E6A12D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67FE0A57-27F9-4945-9A94-CEF4E6A12D4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53E0AE07-368B-4FF3-8F7A-8263A1B1A885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53E0AE07-368B-4FF3-8F7A-8263A1B1A885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53E0AE07-368B-4FF3-8F7A-8263A1B1A885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53E0AE07-368B-4FF3-8F7A-8263A1B1A885}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

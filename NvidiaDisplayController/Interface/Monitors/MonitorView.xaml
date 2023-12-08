@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="NvidiaDisplayController.Interface.Monitors.MonitorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:monitors="clr-namespace:NvidiaDisplayController.Interface.Monitors"
+             mc:Ignorable="d"
+             Width="175"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance monitors:MonitorViewModel}">
+    <ToggleButton
+        IsEnabled="{Binding IsEnabled}"
+        IsChecked="{Binding IsSelected}">
+        <ToggleButton.Content>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Content="Name:"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Grid.Column="0"
+                    Grid.Row="0" />
+                <TextBox
+                    Text="{Binding Name, Mode=OneWay}"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    IsEnabled="False"
+                    FontWeight="Bold"
+                    Grid.Column="1"
+                    Grid.Row="0" />
+                <Label
+                    Content="Width:"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Grid.Column="0"
+                    Grid.Row="1" />
+                <TextBox
+                    Text="{Binding Resolution.Width, Mode=OneWay}"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    IsEnabled="False"
+                    FontWeight="Bold"
+                    Grid.Column="1"
+                    Grid.Row="1" />
+                <Label
+                    Content="Height:"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Grid.Column="0"
+                    Grid.Row="2" />
+                <TextBox
+                    Text="{Binding Resolution.Height, Mode=OneWay}"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    IsEnabled="False"
+                    FontWeight="Bold"
+                    Grid.Column="1"
+                    Grid.Row="2" />
+                <Label
+                    Content="Hz:"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Grid.Column="0"
+                    Grid.Row="3" />
+                <TextBox
+                    Text="{Binding Frequency, Mode=OneWay}"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    IsEnabled="False"
+                    FontWeight="Bold"
+                    Grid.Column="1"
+                    Grid.Row="3" />
+            </Grid>
+        </ToggleButton.Content>
+    </ToggleButton>
+</UserControl>

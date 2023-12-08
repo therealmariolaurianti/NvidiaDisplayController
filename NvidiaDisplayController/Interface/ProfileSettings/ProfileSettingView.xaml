@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="NvidiaDisplayController.Interface.ProfileSettings.ProfileSettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:profileSettings="clr-namespace:NvidiaDisplayController.Interface.ProfileSettings"
+             xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBinding"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance profileSettings:ProfileSettingViewModel}">
+    <Grid
+        IsEnabled="{calcBinding:Binding '!IsDefault'}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Content="Brightness" />
+        <TextBox
+            Text="{Binding Brightness, StringFormat=n2}"
+            Grid.Row="0"
+            Width="100"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Center"
+            Grid.Column="1"
+            Margin="2"/>
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Content="Contrast" />
+        <TextBox
+            Text="{Binding Contrast, StringFormat=n2}"
+            Grid.Row="1"
+            Width="100"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Center"
+            Grid.Column="1"
+            Margin="2"/>
+        <Label
+            Grid.Row="2"
+            Grid.Column="0"
+            Content="Gamma" />
+        <TextBox
+            Text="{Binding Gamma, StringFormat=n2}"
+            Grid.Row="2"
+            Width="100"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Center"
+            Grid.Column="1"
+            Margin="2"/>
+    </Grid>
+</UserControl>

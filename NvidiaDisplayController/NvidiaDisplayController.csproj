@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CalcBinding" Version="2.5.2" />
+        <PackageReference Include="Caliburn.Micro" Version="4.0.212"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Ninject" Version="3.3.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ApplicationDefinition Include="Bootstrap\App.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <XamlRuntime>Wpf</XamlRuntime>
+            <SubType>Designer</SubType>
+        </ApplicationDefinition>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Downloads\WindowsDisplayAPI-master\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Interface\Shell\ShellView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Data\Data.json" />
+      <Compile Include="Data\Data.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\DB-Add.ico" />
+      <Resource Include="Resources\DB-Add.ico" />
+    </ItemGroup>
+
+</Project>

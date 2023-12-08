@@ -100,7 +100,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         }
     }
 
-    public bool CanApply => SelectedProfile is not null && ProfileSettingsIsDirty;
+    public bool CanApply => SelectedProfile is not null;
     public bool CanAddNewProfile => SelectedMonitor is not null;
 
     public async Task HandleAsync(ProfileSettingsEvent message, CancellationToken cancellationToken)
@@ -190,16 +190,26 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     public void Apply()
     {
-        UpdateColorSettings(SelectedMonitor!.Display, SelectedProfile!.ProfileSettings.Brightness,
-            SelectedProfile.ProfileSettings.Contrast, SelectedProfile.ProfileSettings.Gamma);
-
+        UpdateColorSettings(SelectedMonitor!.Display, SelectedProfile!.ProfileSettings.ProfileSetting);
         Write();
     }
 
-    private void UpdateColorSettings(Display display,
-        double brightness = 0.5, double contrast = 0.5, double gamma = 1)
+    public void Revert()
     {
-        var newGamma = new DisplayGammaRamp(brightness, contrast, gamma);
-        display.GammaRamp = newGamma;
+        Task.Run(async () => await _eventAggregator.PublishOnCurrentThreadAsync(new RevertEvent()));
+    }
+
+    public void Update()
+    {
+        Write();
+
+        SelectedProfile!.IsUpdated();
+        ProfileSettingsIsDirty = false;
+    }
+
+    private void UpdateColorSettings(Display display, ProfileSetting profileSetting)
+    {
+        display.GammaRamp =
+            new DisplayGammaRamp(profileSetting.Brightness, profileSetting.Contrast, profileSetting.Gamma);
     }
 }

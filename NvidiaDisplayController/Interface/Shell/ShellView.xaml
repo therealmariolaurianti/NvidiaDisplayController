@@ -117,13 +117,35 @@
         <Grid
             HorizontalAlignment="Center"
             Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
             <Button
                 Name="Apply"
                 IsEnabled="{Binding CanApply}"
                 Height="30"
+                Grid.Column="0"
                 Width="75"
                 Margin="5"
                 Content="Apply" />
+            <Button
+                Name="Update"
+                IsEnabled="{Binding ProfileSettingsIsDirty}"
+                Height="30"
+                Grid.Column="1"
+                Width="75"
+                Margin="5"
+                Content="Update" />
+            <Button
+                Name="Revert"
+                IsEnabled="{Binding ProfileSettingsIsDirty}"
+                Height="30"
+                Width="75"
+                Grid.Column="2"
+                Margin="5"
+                Content="Revert" />
         </Grid>
     </Grid>
 </UserControl>

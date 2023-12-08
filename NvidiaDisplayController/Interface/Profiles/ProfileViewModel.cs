@@ -14,17 +14,16 @@ public class ProfileViewModel : Screen
     private bool _callEvent;
     private bool _isSelected;
 
-    private readonly IProfileSettingViewModelFactory _profileSettingViewModelFactory;
-
-    public ProfileViewModel(Profile profile,MonitorViewModel monitorViewModel, IProfileSettingViewModelFactory profileSettingViewModelFactory)
+    public ProfileViewModel(Profile profile, MonitorViewModel monitorViewModel,
+        IProfileSettingViewModelFactory profileSettingViewModelFactory)
     {
         Profile = profile;
         MonitorViewModel = monitorViewModel;
-        _profileSettingViewModelFactory = profileSettingViewModelFactory;
         Guid = Guid.NewGuid();
         _callEvent = true;
 
         CreateContextMenu();
+        ProfileSettings = profileSettingViewModelFactory.Create(Profile.ProfileSetting, Profile.IsDefault);
     }
 
     public Profile Profile { get; }
@@ -32,8 +31,7 @@ public class ProfileViewModel : Screen
     public string Name => Profile.Name;
     public Guid Guid { get; }
 
-    public ProfileSettingViewModel ProfileSettings =>
-        _profileSettingViewModelFactory.Create(Profile.ProfileSetting, Profile.IsDefault);
+    public ProfileSettingViewModel ProfileSettings { get; set; }
 
     public ContextMenu ContextMenu { get; set; }
     public MonitorViewModel MonitorViewModel { get; set; }
@@ -53,6 +51,11 @@ public class ProfileViewModel : Screen
 
     public Action<Guid> IsSelectedChanged { get; set; }
     public bool IsDefault => Profile.IsDefault;
+
+    public void IsUpdated()
+    {
+        ProfileSettings.IsUpdated();
+    }
 
     private void CreateContextMenu()
     {

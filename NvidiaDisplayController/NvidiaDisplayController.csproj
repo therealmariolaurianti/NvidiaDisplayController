@@ -12,6 +12,8 @@
         <PackageReference Include="Caliburn.Micro" Version="4.0.212"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Ninject" Version="3.3.6" />
+        <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />
+        <PackageReference Include="Ninject.Extensions.Factory" Version="3.3.3" />
     </ItemGroup>
 
     <ItemGroup>

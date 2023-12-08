@@ -120,6 +120,14 @@
             "Ninject": {
               "target": "Package",
               "version": "[3.3.6, )"
+            },
+            "Ninject.Extensions.Factory": {
+              "target": "Package",
+              "version": "[3.3.3, )"
+            },
+            "ninject.extensions.conventions": {
+              "target": "Package",
+              "version": "[3.3.0, )"
             }
           },
           "imports": [

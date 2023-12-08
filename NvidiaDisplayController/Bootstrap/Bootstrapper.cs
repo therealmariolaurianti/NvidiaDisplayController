@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows;
 using Caliburn.Micro;
 using Ninject;
+using Ninject.Extensions.Conventions;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Interface.Shell;
 using NvidiaDisplayController.Objects;
@@ -50,6 +51,12 @@ public class Bootstrapper : BootstrapperBase
     protected override void OnStartup(object sender, StartupEventArgs e)
     {
         _kernel.Bind<IWindowManager>().To<WindowManager>();
+        _kernel.Bind<IEventAggregator>().To<EventAggregator>();
+
+        _kernel.Bind(x => x.FromThisAssembly()
+            .SelectAllInterfaces()
+            .InheritedFrom<IFactory>()
+            .BindToFactory());
 
         Load();
         DisplayRootViewForAsync<ShellViewModel>();

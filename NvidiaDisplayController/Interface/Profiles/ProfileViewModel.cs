@@ -5,18 +5,22 @@ using Caliburn.Micro;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.ProfileSettings;
 using NvidiaDisplayController.Objects;
-using Action = System.Action;
+using NvidiaDisplayController.Objects.Factories;
 
 namespace NvidiaDisplayController.Interface.Profiles;
 
 public class ProfileViewModel : Screen
 {
-    private bool _isSelected;
     private bool _callEvent;
+    private bool _isSelected;
 
-    public ProfileViewModel(Profile profile)
+    private readonly IProfileSettingViewModelFactory _profileSettingViewModelFactory;
+
+    public ProfileViewModel(Profile profile,MonitorViewModel monitorViewModel, IProfileSettingViewModelFactory profileSettingViewModelFactory)
     {
         Profile = profile;
+        MonitorViewModel = monitorViewModel;
+        _profileSettingViewModelFactory = profileSettingViewModelFactory;
         Guid = Guid.NewGuid();
         _callEvent = true;
 
@@ -27,7 +31,10 @@ public class ProfileViewModel : Screen
     public Action<Guid> ProfileRemoved { get; set; }
     public string Name => Profile.Name;
     public Guid Guid { get; }
-    public ProfileSettingViewModel ProfileSettings => new(Profile.ProfileSetting, Profile.IsDefault);
+
+    public ProfileSettingViewModel ProfileSettings =>
+        _profileSettingViewModelFactory.Create(Profile.ProfileSetting, Profile.IsDefault);
+
     public ContextMenu ContextMenu { get; set; }
     public MonitorViewModel MonitorViewModel { get; set; }
 
@@ -39,7 +46,7 @@ public class ProfileViewModel : Screen
             if (value == _isSelected) return;
             _isSelected = value;
             NotifyOfPropertyChange();
-            if(_callEvent)
+            if (_callEvent)
                 IsSelectedChanged.Invoke(Guid);
         }
     }

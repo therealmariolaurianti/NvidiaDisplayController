@@ -41,3 +41,6 @@ C:\Users\Mario\RiderProjects\NvidiaDisplayController\NvidiaDisplayController\bin
 C:\Users\Mario\RiderProjects\NvidiaDisplayController\NvidiaDisplayController\bin\Debug\net7.0-windows\DynamicExpresso.Core.dll
 C:\Users\Mario\RiderProjects\NvidiaDisplayController\NvidiaDisplayController\obj\Debug\net7.0-windows\Interface\ProfileNames\ProfileNameView.baml
 C:\Users\Mario\RiderProjects\NvidiaDisplayController\NvidiaDisplayController\obj\Debug\net7.0-windows\Interface\ProfileNames\ProfileNameView.g.cs
+C:\Users\Mario\RiderProjects\NvidiaDisplayController\NvidiaDisplayController\bin\Debug\net7.0-windows\Castle.Core.dll
+C:\Users\Mario\RiderProjects\NvidiaDisplayController\NvidiaDisplayController\bin\Debug\net7.0-windows\Ninject.Extensions.Conventions.dll
+C:\Users\Mario\RiderProjects\NvidiaDisplayController\NvidiaDisplayController\bin\Debug\net7.0-windows\Ninject.Extensions.Factory.dll

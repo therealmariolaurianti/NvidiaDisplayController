@@ -6,10 +6,12 @@ namespace NvidiaDisplayController.Interface.ProfileSettings;
 public class ProfileSettingViewModel : Screen
 {
     private readonly ProfileSetting _profileSetting;
+    private readonly IEventAggregator _eventAggregator;
 
-    public ProfileSettingViewModel(ProfileSetting profileSetting, bool isDefault)
+    public ProfileSettingViewModel(ProfileSetting profileSetting, bool isDefault, IEventAggregator eventAggregator)
     {
         IsDefault = isDefault;
+        _eventAggregator = eventAggregator;
         _profileSetting = profileSetting;
     }
 
@@ -23,6 +25,8 @@ public class ProfileSettingViewModel : Screen
             if (value.Equals(_profileSetting.Brightness)) return;
             _profileSetting.Brightness = value;
             NotifyOfPropertyChange();
+            
+            _eventAggregator.PublishOnCurrentThreadAsync(new ProfileSettingsEvent(true));
         }
     }
 
@@ -34,6 +38,8 @@ public class ProfileSettingViewModel : Screen
             if (value.Equals(_profileSetting.Contrast)) return;
             _profileSetting.Contrast = value;
             NotifyOfPropertyChange();
+            
+            _eventAggregator.PublishOnCurrentThreadAsync(new ProfileSettingsEvent(true));
         }
     }
 
@@ -45,6 +51,8 @@ public class ProfileSettingViewModel : Screen
             if (value.Equals(_profileSetting.Gamma)) return;
             _profileSetting.Gamma = value;
             NotifyOfPropertyChange();
+            
+            _eventAggregator.PublishOnCurrentThreadAsync(new ProfileSettingsEvent(true));
         }
     }
 }

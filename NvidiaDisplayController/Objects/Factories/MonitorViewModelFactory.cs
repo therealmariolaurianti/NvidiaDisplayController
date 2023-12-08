@@ -4,9 +4,9 @@ namespace NvidiaDisplayController.Objects.Factories;
 
 public class MonitorViewModelFactory
 {
-    private readonly ProfileViewModelFactory _profileViewModelFactory;
+    private readonly IProfileViewModelFactory _profileViewModelFactory;
 
-    public MonitorViewModelFactory(ProfileViewModelFactory profileViewModelFactory)
+    public MonitorViewModelFactory(IProfileViewModelFactory profileViewModelFactory)
     {
         _profileViewModelFactory = profileViewModelFactory;
     }

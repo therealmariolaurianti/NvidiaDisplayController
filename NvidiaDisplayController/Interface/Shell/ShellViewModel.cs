@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.Profiles;
+using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
 using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Interface.Shell;
 
-public class ShellViewModel : Screen
+public class ShellViewModel : Screen, IHandle<ProfileSettingsEvent>
 {
     private readonly DataController _dataController;
     private readonly MonitorViewModelFactory _monitorViewModelFactory;
     private readonly ProfileFactory _profileFactory;
     private readonly ProfileNameViewModelFactory _profileNameViewModelFactory;
-    private readonly ProfileViewModelFactory _profileViewModelFactory;
+    private readonly IProfileViewModelFactory _profileViewModelFactory;
 
     private readonly WindowManager _windowManager;
 
@@ -25,8 +28,10 @@ public class ShellViewModel : Screen
     private MonitorViewModel? _selectedMonitor;
     private ProfileViewModel? _selectedProfile;
 
-    public ShellViewModel(MonitorViewModelFactory monitorViewModelFactory,
-        DataController dataController, ProfileViewModelFactory profileViewModelFactory, ProfileFactory profileFactory,
+    public ShellViewModel(
+        IEventAggregator eventAggregator,
+        MonitorViewModelFactory monitorViewModelFactory,
+        DataController dataController, IProfileViewModelFactory profileViewModelFactory, ProfileFactory profileFactory,
         WindowManager windowManager, ProfileNameViewModelFactory profileNameViewModelFactory)
     {
         _monitorViewModelFactory = monitorViewModelFactory;
@@ -35,6 +40,8 @@ public class ShellViewModel : Screen
         _profileFactory = profileFactory;
         _windowManager = windowManager;
         _profileNameViewModelFactory = profileNameViewModelFactory;
+
+        eventAggregator.SubscribeOnPublishedThread(this);
 
         Start();
     }
@@ -81,8 +88,16 @@ public class ShellViewModel : Screen
         }
     }
 
-    public bool CanApply => SelectedProfile is not null;
+    public bool ProfileSettingsIsDirty { get; set; }
+
+    public bool CanApply => SelectedProfile is not null && ProfileSettingsIsDirty;
     public bool CanAddNewProfile => SelectedMonitor is not null;
+
+    public async Task HandleAsync(ProfileSettingsEvent message, CancellationToken cancellationToken)
+    {
+        ProfileSettingsIsDirty = message.IsDirty;
+        await Task.CompletedTask;
+    }
 
     private void Start()
     {

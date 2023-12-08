@@ -161,6 +161,11 @@ public class ShellViewModel : Screen
         }
     }
 
+    public void Apply()
+    {
+        Write();
+    }
+
     // private void UpdateColorSettings(Display display,
     //     double brightness = 0.5, double contrast = 0.5, double gamma = 1)
     // {

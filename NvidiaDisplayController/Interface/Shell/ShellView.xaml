@@ -15,9 +15,25 @@
                  WindowStyle="ToolWindow"
                  GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
                  ResizeMode="CanMinimize"
+                 BorderBrush="{DynamicResource AccentColorBrush}"
+                 BorderThickness="1"
+                 IconOverlayBehavior="Never"
+                 LeftWindowCommandsOverlayBehavior="Never"
+                 RightWindowCommandsOverlayBehavior="Never"
+                 SaveWindowPosition="True"
+                 TitleCharacterCasing="Normal"
+                 WindowButtonCommandsOverlayBehavior="Always"
+                 Icon="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
                  d:DesignHeight="300"
                  d:DesignWidth="300"
                  d:DataContext="{d:DesignInstance shell:ShellViewModel}">
+    <mah:MetroWindow.IconTemplate>
+        <DataTemplate>
+            <Image
+                Source="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
+                Height="17" />
+        </DataTemplate>
+    </mah:MetroWindow.IconTemplate>
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <Button>

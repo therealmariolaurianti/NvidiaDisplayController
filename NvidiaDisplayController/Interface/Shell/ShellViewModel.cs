@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using Microsoft.Win32;
 using NvidiaDisplayController.Data;
+using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects;
@@ -263,12 +264,6 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SelectedProfile = SelectedMonitor?.Profiles.SingleOrDefault(p => p.IsActive);
         if (SelectedProfile is not null)
             SelectedProfile.IsSelected = true;
-        else
-        {
-            SelectedProfile = SelectedMonitor?.Profiles.SingleOrDefault(p => p.IsDefault);
-            if (SelectedProfile is not null)
-                SelectedProfile.IsSelected = true;
-        }
     }
 
     private void SetMonitorState(Guid selectedMonitor, bool isEnabled)
@@ -305,6 +300,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         Write();
 
         ProfileSettingsIsDirty = false;
+        GlobalEvents.UpdateToolTip.Invoke();
     }
 
     private void SetActiveProfile()

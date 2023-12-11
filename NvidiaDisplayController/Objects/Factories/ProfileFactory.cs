@@ -5,7 +5,7 @@ public class ProfileFactory
     public Profile CreateDefault(Monitor monitor)
     {
         return new Profile(monitor, "Default",
-            new ProfileSetting(0.5, 0.5, 1.0, 0.5), false, true);
+            new ProfileSetting(0.5, 0.5, 1.0, 0.5), true, true);
     }
 
     public Profile Create(Monitor monitor, string name)

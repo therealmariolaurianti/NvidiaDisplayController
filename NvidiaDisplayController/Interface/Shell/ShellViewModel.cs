@@ -255,9 +255,20 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SelectedNvidiaMonitor =
             _nvidiaDisplays.SingleOrDefault(d => d.Name == SelectedMonitor?.Display.DisplayScreen.ScreenName);
 
-        SelectedProfile = SelectedMonitor?.Profiles.Single(p => p.IsActive);
+        SetSelectedProfile();
+    }
+
+    private void SetSelectedProfile()
+    {
+        SelectedProfile = SelectedMonitor?.Profiles.SingleOrDefault(p => p.IsActive);
         if (SelectedProfile is not null)
             SelectedProfile.IsSelected = true;
+        else
+        {
+            SelectedProfile = SelectedMonitor?.Profiles.SingleOrDefault(p => p.IsDefault);
+            if (SelectedProfile is not null)
+                SelectedProfile.IsSelected = true;
+        }
     }
 
     private void SetMonitorState(Guid selectedMonitor, bool isEnabled)

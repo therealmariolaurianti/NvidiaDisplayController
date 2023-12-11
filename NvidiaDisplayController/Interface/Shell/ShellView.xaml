@@ -20,18 +20,7 @@
                  LeftWindowCommandsOverlayBehavior="Never"
                  RightWindowCommandsOverlayBehavior="Never"
                  GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
-                 Icon="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
                  d:DataContext="{d:DesignInstance shell:ShellViewModel}">
-    <mah:MetroWindow.Resources>
-        
-    </mah:MetroWindow.Resources>
-    <mah:MetroWindow.IconTemplate>
-        <DataTemplate>
-            <Image
-                Source="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
-                Height="17" />
-        </DataTemplate>
-    </mah:MetroWindow.IconTemplate>
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <StackPanel

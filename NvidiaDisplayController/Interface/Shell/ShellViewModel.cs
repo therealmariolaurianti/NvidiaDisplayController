@@ -9,6 +9,7 @@ using Caliburn.Micro;
 using Microsoft.Win32;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Global;
+using NvidiaDisplayController.Interface.Help;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects;
@@ -22,6 +23,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 {
     private readonly DataController _dataController;
     private readonly IEventAggregator _eventAggregator;
+
+    private readonly IHelpViewModelFactory _helpViewModelFactory;
     private readonly MonitorViewModelFactory _monitorViewModelFactory;
     private readonly ProfileFactory _profileFactory;
     private readonly IProfileNameViewModelFactory _profileNameViewModelFactory;
@@ -39,7 +42,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         IEventAggregator eventAggregator,
         MonitorViewModelFactory monitorViewModelFactory,
         DataController dataController, IProfileViewModelFactory profileViewModelFactory, ProfileFactory profileFactory,
-        WindowManager windowManager, IProfileNameViewModelFactory profileNameViewModelFactory)
+        WindowManager windowManager, IProfileNameViewModelFactory profileNameViewModelFactory,
+        IHelpViewModelFactory helpViewModelFactory)
     {
         _eventAggregator = eventAggregator;
         _monitorViewModelFactory = monitorViewModelFactory;
@@ -48,6 +52,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         _profileFactory = profileFactory;
         _windowManager = windowManager;
         _profileNameViewModelFactory = profileNameViewModelFactory;
+        _helpViewModelFactory = helpViewModelFactory;
 
         _eventAggregator.SubscribeOnPublishedThread(this);
 
@@ -333,9 +338,12 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     public void OpenHelp()
     {
+        var viewModel = _helpViewModelFactory.Create();
+        _windowManager.ShowDialogAsync(viewModel);
     }
 
     public void OpenDonation()
     {
+        WebsiteLauncher.OpenWebsite("https://www.paypal.com/donate/?hosted_button_id=FT6HS8V8R4XYC");
     }
 }

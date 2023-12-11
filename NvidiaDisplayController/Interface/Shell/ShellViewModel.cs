@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Microsoft.Win32;
+using NLog;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Interface.Help;
@@ -25,6 +26,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private readonly IEventAggregator _eventAggregator;
 
     private readonly IHelpViewModelFactory _helpViewModelFactory;
+    private readonly ILogger _logger;
     private readonly MonitorViewModelFactory _monitorViewModelFactory;
     private readonly ProfileFactory _profileFactory;
     private readonly IProfileNameViewModelFactory _profileNameViewModelFactory;
@@ -43,7 +45,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         MonitorViewModelFactory monitorViewModelFactory,
         DataController dataController, IProfileViewModelFactory profileViewModelFactory, ProfileFactory profileFactory,
         WindowManager windowManager, IProfileNameViewModelFactory profileNameViewModelFactory,
-        IHelpViewModelFactory helpViewModelFactory)
+        IHelpViewModelFactory helpViewModelFactory,
+        ILogger logger)
     {
         _eventAggregator = eventAggregator;
         _monitorViewModelFactory = monitorViewModelFactory;
@@ -53,6 +56,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         _windowManager = windowManager;
         _profileNameViewModelFactory = profileNameViewModelFactory;
         _helpViewModelFactory = helpViewModelFactory;
+        _logger = logger;
 
         _eventAggregator.SubscribeOnPublishedThread(this);
 
@@ -201,11 +205,23 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
             Monitors.Add(monitorViewModel);
         }
-
-        _nvidiaDisplays = Display.GetDisplays().ToList();
+        
         Computer = computer;
 
+        LoadNvidiaDisplays();
         ApplySettingsOnStart();
+    }
+
+    private void LoadNvidiaDisplays()
+    {
+        try
+        {
+            _nvidiaDisplays = Display.GetDisplays().ToList();
+        }
+        catch (Exception e)
+        {
+            _logger.Error(e);
+        }
     }
 
     private void ApplySettingsOnStart()
@@ -216,7 +232,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
                 var activeProfile = monitorViewModel.Profiles.SingleOrDefault(p => p.IsActive);
                 var nvidiaDisplay =
                     _nvidiaDisplays.SingleOrDefault(d => d.Name == monitorViewModel.Display.DisplayScreen.ScreenName);
-                if (activeProfile is not null && nvidiaDisplay is not null)
+                if (activeProfile is not null)
                     UpdateColorSettings(monitorViewModel.Display, activeProfile.ProfileSettings.ProfileSetting,
                         nvidiaDisplay);
             }
@@ -333,7 +349,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         display.GammaRamp =
             new DisplayGammaRamp(profileSetting.Brightness, profileSetting.Contrast, profileSetting.Gamma);
-        nvidiaMonitor!.DigitalVibranceControl.NormalizedLevel = profileSetting.DigitalVibrance - .3;
+        if (nvidiaMonitor is not null)
+            nvidiaMonitor.DigitalVibranceControl.NormalizedLevel = profileSetting.DigitalVibrance - .3;
     }
 
     public void OpenHelp()

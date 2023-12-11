@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Threading;
 using Caliburn.Micro;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using NLog;
+using NvAPIWrapper;
 using NvidiaDisplayController.Data;
+using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Interface.Shell;
 using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
@@ -29,6 +33,7 @@ public class Bootstrapper : BootstrapperBase
 
     private MonitorFactory _monitorFactory => _kernel.Get<MonitorFactory>();
     private DataController _dataController => _kernel.Get<DataController>();
+    private ILogger _fileLogger => _kernel.Get<ILogger>();
 
     protected override void BuildUp(object instance)
     {
@@ -52,21 +57,49 @@ public class Bootstrapper : BootstrapperBase
     {
         _kernel.Bind<IWindowManager>().To<WindowManager>();
         _kernel.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
+        _kernel.Bind<ILogger>().ToConstant(NLog.LogManager.GetCurrentClassLogger()).InSingletonScope();
 
         _kernel.Bind(x => x.FromThisAssembly()
             .SelectAllInterfaces()
             .InheritedFrom<IFactory>()
             .BindToFactory());
 
+        StartNvidia();
         Load();
         DisplayRootViewForAsync<ShellViewModel>();
     }
 
+    private void StartNvidia()
+    {
+        try
+        {
+            NVIDIA.Initialize();
+        }
+        catch (Exception e)
+        {
+            Log(e, "Nvidia device not found.");
+        }
+    }
+
+    private void Log(Exception e, string message)
+    {
+        _fileLogger.Error(e);
+        Execute.OnUIThread(() => MessageBox.Show(message));
+        Application.Shutdown();
+    }
+
     private void Load()
     {
-        var computer = _dataController.Load();
-        if (computer is null)
-            Start();
+        try
+        {
+            var computer = _dataController.Load();
+            if (computer is null)
+                Start();
+        }
+        catch (Exception e)
+        {
+            Log(e, "Nvidia device not found.");
+        }
     }
 
     private void Start()
@@ -87,9 +120,25 @@ public class Bootstrapper : BootstrapperBase
 
             monitors.Add(monitor);
         }
-        
+
         computer.Monitors.AddRange(monitors);
 
         _dataController.Write(computer);
+    }
+
+    protected override void PrepareApplication()
+    {
+        AppDomain.CurrentDomain.UnhandledException += OnError;
+        base.PrepareApplication();
+    }
+
+    private void OnError(object sender, UnhandledExceptionEventArgs e)
+    {
+        Log((Exception) e.ExceptionObject, "An unexpected error has occured.");
+    }
+    
+    protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        _fileLogger.Error(e);
     }
 }

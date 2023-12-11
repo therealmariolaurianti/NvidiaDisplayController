@@ -15,7 +15,7 @@
         BorderBrush="Black"
         BorderThickness="1">
         <ToggleButton
-            Style="{DynamicResource MetroCircleToggleButtonStyle}"
+            Style="{DynamicResource CustomMetroRectToggleButtonStyle}"
             IsChecked="{Binding IsSelected}"
             FontSize="16"
             FontWeight="Bold">

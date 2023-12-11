@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Drawing;
-using Newtonsoft.Json;
 
 namespace NvidiaDisplayController.Objects;
 

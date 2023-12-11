@@ -64,13 +64,14 @@ public class Bootstrapper : BootstrapperBase
 
     private void Load()
     {
-        var monitors = _dataController.Load();
-        if (monitors is null)
-            StartupMonitors();
+        var computer = _dataController.Load();
+        if (computer is null)
+            Start();
     }
 
-    private void StartupMonitors()
+    private void Start()
     {
+        var computer = new Computer();
         var displays = Display.GetDisplays();
         var pathDisplayTargets = PathDisplayTarget.GetDisplayTargets();
 
@@ -86,7 +87,9 @@ public class Bootstrapper : BootstrapperBase
 
             monitors.Add(monitor);
         }
+        
+        computer.Monitors.AddRange(monitors);
 
-        _dataController.Write(monitors);
+        _dataController.Write(computer);
     }
 }

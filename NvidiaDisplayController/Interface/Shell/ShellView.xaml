@@ -9,22 +9,22 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
-                 Height="545"
+                 Height="580"
                  Width="600"
                  WindowStartupLocation="CenterScreen"
                  WindowStyle="ToolWindow"
-                 GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
                  ResizeMode="CanMinimize"
-                 BorderBrush="{DynamicResource AccentColorBrush}"
-                 BorderThickness="1"
+                 TitleCharacterCasing="Normal"
+                 WindowButtonCommandsOverlayBehavior="Always"
                  IconOverlayBehavior="Never"
                  LeftWindowCommandsOverlayBehavior="Never"
                  RightWindowCommandsOverlayBehavior="Never"
-                 SaveWindowPosition="True"
-                 TitleCharacterCasing="Normal"
-                 WindowButtonCommandsOverlayBehavior="Always"
+                 GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
                  Icon="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
                  d:DataContext="{d:DesignInstance shell:ShellViewModel}">
+    <mah:MetroWindow.Resources>
+        
+    </mah:MetroWindow.Resources>
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
             <Image
@@ -69,14 +69,28 @@
     </mah:MetroWindow.RightWindowCommands>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" MinHeight="130" />
             <RowDefinition Height="175" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <CheckBox 
+                Name="IsStartWithWindows"
+                Margin="5"
+                Content="Start with Windows"/>
+            <CheckBox 
+                Name="IsApplySettingsOnStart"
+                Margin="10,5,5,5"
+                Content="Apply Settings on Start"/>
+        </StackPanel>
         <GroupBox
             Margin="2"
-            Grid.Row="0">
+            Grid.Row="1">
             <GroupBox.Header>
                 <TextBlock
                     Text="Monitors"
@@ -108,7 +122,7 @@
         </GroupBox>
         <GroupBox
             Margin="2"
-            Grid.Row="1">
+            Grid.Row="2">
             <GroupBox.Header>
                 <TextBlock
                     Text="Profiles"
@@ -160,7 +174,7 @@
         </GroupBox>
         <GroupBox
             Margin="2"
-            Grid.Row="2">
+            Grid.Row="3">
             <GroupBox.Header>
                 <TextBlock
                     Text="Profile Details"
@@ -176,7 +190,7 @@
         <Grid
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            Grid.Row="3">
+            Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />

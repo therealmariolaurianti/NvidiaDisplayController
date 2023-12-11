@@ -23,24 +23,24 @@ public class DataController
         }
     }
 
-    public void Write(List<Monitor> monitors)
+    public void Write(Computer computer)
     {
-        var serializeObject = JsonConvert.SerializeObject(monitors, new JsonSerializerSettings
+        var serializeObject = JsonConvert.SerializeObject(computer, new JsonSerializerSettings
         {
             PreserveReferencesHandling = PreserveReferencesHandling.Objects
         });
         File.WriteAllText(DataPath, serializeObject);
     }
 
-    public List<Monitor>? Load()
+    public Computer? Load()
     {
         using StreamReader reader = new(DataPath);
         {
             var json = reader.ReadToEnd();
-            var monitors = JsonConvert.DeserializeObject<List<Monitor>>(json);
+            var computers = JsonConvert.DeserializeObject<Computer>(json);
             reader.Close();
             
-            return monitors;
+            return computers;
         }
     }
 }

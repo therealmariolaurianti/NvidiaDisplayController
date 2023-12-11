@@ -18,7 +18,7 @@
                 VerticalAlignment="Center"
                 Grid.Row="0" />
             <TextBox
-                Text="{Binding ProfileName}"
+                Text="{Binding ProfileName, UpdateSourceTrigger=PropertyChanged}"
                 Margin="2"
                 Width="250"
                 VerticalContentAlignment="Center"
@@ -32,12 +32,14 @@
             Orientation="Horizontal">
             <Button
                 Name="Save"
+                Style="{DynamicResource DarkThemeButtonStyle}"
                 Height="30"
                 Width="75"
                 Margin="2"
                 Content="Save" />
             <Button
                 Name="Cancel"
+                Style="{DynamicResource DarkThemeButtonStyle}"
                 Height="30"
                 Width="75"
                 Margin="2"

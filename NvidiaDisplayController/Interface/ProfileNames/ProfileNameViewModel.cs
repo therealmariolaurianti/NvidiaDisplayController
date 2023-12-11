@@ -20,8 +20,11 @@ public class ProfileNameViewModel : Screen
             if (value == _profileName) return;
             _profileName = value;
             NotifyOfPropertyChange();
+            NotifyOfPropertyChange(nameof(CanSave));
         }
     }
+
+    public bool CanSave => !string.IsNullOrEmpty(ProfileName);
 
     public void Save()
     {

@@ -22,27 +22,6 @@
     RightWindowCommandsOverlayBehavior="Never"
     GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
     d:DataContext="{d:DesignInstance shell:ShellViewModel}">
-    <mah:MetroWindow.Resources>
-        <Style
-            x:Key="DarkThemeButtonStyle"
-            BasedOn="{StaticResource MahApps.Styles.Button.Flat}"
-            TargetType="{x:Type Button}">
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
-            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray8}" />
-            <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.SystemControlForegroundChromeWhite}" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
-                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray8}" />
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
-                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </mah:MetroWindow.Resources>
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <StackPanel

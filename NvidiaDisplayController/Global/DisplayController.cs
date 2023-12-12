@@ -1,5 +1,4 @@
 ﻿using System;
-using Caliburn.Micro;
 using NLog;
 using NvidiaDisplayController.Objects;
 using WindowsDisplayAPI;
@@ -9,12 +8,10 @@ namespace NvidiaDisplayController.Global;
 public class DisplayController
 {
     private readonly ILogger _logger;
-    private IWindowManager _windowManager;
 
-    public DisplayController(ILogger logger, IWindowManager windowManager)
+    public DisplayController(ILogger logger)
     {
         _logger = logger;
-        _windowManager = windowManager;
     }
 
     public void UpdateColorSettings(Display display, ProfileSetting profileSetting,

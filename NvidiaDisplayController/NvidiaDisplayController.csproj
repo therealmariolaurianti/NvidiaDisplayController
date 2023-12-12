@@ -33,10 +33,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\Downloads\WindowsDisplayAPI-master\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <Page Update="Interface\Shell\ShellView.xaml">
             <Generator>MSBuild:Compile</Generator>
             <XamlRuntime>Wpf</XamlRuntime>
@@ -67,6 +63,10 @@
 
     <ItemGroup>
         <Resource Include="Resources\desktop.png"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj" />
     </ItemGroup>
 
 </Project>

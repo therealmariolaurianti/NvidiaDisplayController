@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0;net45</TargetFrameworks>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <OutputType>Exe</OutputType>
+    <StartupObject>WindowsDisplaySample.Program</StartupObject>
+    <Product>WindowsDisplayAPI</Product>
+    <Authors>Soroush Falahati</Authors>
+    <Copyright>Copyright © Soroush Falahati 2017</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WindowsDisplayAPI\WindowsDisplayAPI.csproj" />
+  </ItemGroup>
+</Project>

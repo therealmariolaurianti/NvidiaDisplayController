@@ -10,12 +10,12 @@ using Ninject.Extensions.Conventions;
 using NLog;
 using NvAPIWrapper;
 using NvidiaDisplayController.Data;
-using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Interface.Shell;
 using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
 using WindowsDisplayAPI;
 using WindowsDisplayAPI.DisplayConfig;
+using LogManager = NLog.LogManager;
 
 namespace NvidiaDisplayController.Bootstrap;
 
@@ -57,19 +57,20 @@ public class Bootstrapper : BootstrapperBase
     {
         _kernel.Bind<IWindowManager>().To<WindowManager>();
         _kernel.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
-        _kernel.Bind<ILogger>().ToConstant(NLog.LogManager.GetCurrentClassLogger()).InSingletonScope();
+        _kernel.Bind<ILogger>().ToConstant(LogManager.GetCurrentClassLogger()).InSingletonScope();
 
         _kernel.Bind(x => x.FromThisAssembly()
             .SelectAllInterfaces()
             .InheritedFrom<IFactory>()
             .BindToFactory());
 
-        StartNvidia();
-        Load();
+        TryStartNvidia();
+        TryLoad();
+
         DisplayRootViewForAsync<ShellViewModel>();
     }
 
-    private void StartNvidia()
+    private void TryStartNvidia()
     {
         try
         {
@@ -88,7 +89,7 @@ public class Bootstrapper : BootstrapperBase
         Application.Shutdown();
     }
 
-    private void Load()
+    private void TryLoad()
     {
         try
         {
@@ -98,7 +99,7 @@ public class Bootstrapper : BootstrapperBase
         }
         catch (Exception e)
         {
-            Log(e, "Nvidia device not found.");
+            Log(e, "Failed to load data.");
         }
     }
 
@@ -134,9 +135,9 @@ public class Bootstrapper : BootstrapperBase
 
     private void OnError(object sender, UnhandledExceptionEventArgs e)
     {
-        Log((Exception) e.ExceptionObject, "An unexpected error has occured.");
+        Log((Exception)e.ExceptionObject, "An unexpected error has occured.");
     }
-    
+
     protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         _fileLogger.Error(e);

@@ -186,6 +186,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         foreach (var monitor in computer!.Monitors)
         {
             var monitorViewModel = _monitorViewModelFactory.Create(monitor);
+            if (monitorViewModel is null)
+                continue;
+
             foreach (var profileViewModel in monitorViewModel.Profiles)
                 WireProfileEvents(profileViewModel);
 
@@ -208,6 +211,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         }
         catch (Exception e)
         {
+            _logger.Error("Failed to load nvidia displays.");
             _logger.Error(e);
         }
     }

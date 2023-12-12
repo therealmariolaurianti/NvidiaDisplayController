@@ -66,7 +66,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj" />
+        <ProjectReference Include="..\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj"/>
     </ItemGroup>
 
 </Project>

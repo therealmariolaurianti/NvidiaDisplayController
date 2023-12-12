@@ -1,19 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using NLog;
 using NvidiaDisplayController.Interface.Monitors;
+using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Objects.Factories;
 
 public class MonitorViewModelFactory
 {
+    private readonly ILogger _logger;
     private readonly IProfileViewModelFactory _profileViewModelFactory;
 
-    public MonitorViewModelFactory(IProfileViewModelFactory profileViewModelFactory)
+    public MonitorViewModelFactory(IProfileViewModelFactory profileViewModelFactory, ILogger logger)
     {
         _profileViewModelFactory = profileViewModelFactory;
+        _logger = logger;
     }
 
-    public MonitorViewModel Create(Monitor monitor)
+    private IEnumerable<Display> _displays
     {
-        var monitorViewModel = new MonitorViewModel(monitor);
+        get
+        {
+            try
+            {
+                var enumerable = Display.GetDisplays();
+                return enumerable;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return Enumerable.Empty<Display>();
+            }
+        }
+    }
+
+    public MonitorViewModel? Create(Monitor monitor)
+    {
+        var display = _displays.SingleOrDefault(d => d.DevicePath == monitor.DisplayDevicePath);
+        if (display is null)
+            return null;
+
+        var monitorViewModel = new MonitorViewModel(monitor, display);
+
         foreach (var profile in monitor.Profiles)
         {
             var profileViewModel = _profileViewModelFactory.Create(profile, monitorViewModel);

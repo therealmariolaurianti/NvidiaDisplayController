@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Linq;
 using Caliburn.Micro;
 using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects;
@@ -15,16 +14,18 @@ public class MonitorViewModel : Screen
     private bool _isSelected;
     private ObservableCollection<ProfileViewModel> _profiles;
 
-    public MonitorViewModel(Monitor monitor)
+    public MonitorViewModel(Monitor monitor, Display display)
     {
         Monitor = monitor;
+        Display = display;
+        
         _isEnabled = true;
         _profiles = new ObservableCollection<ProfileViewModel>();
         Guid = Guid.NewGuid();
     }
 
     public Monitor Monitor { get; }
-    public Display Display => Display.GetDisplays().Single(d => d.DevicePath == Monitor.DisplayDevicePath);
+    public Display Display { get; }
 
     public string Name => Monitor.Name;
     public Size Resolution => Monitor.Resolution;

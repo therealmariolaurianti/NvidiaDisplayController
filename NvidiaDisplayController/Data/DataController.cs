@@ -27,7 +27,7 @@ public class DataController
         {
             PreserveReferencesHandling = PreserveReferencesHandling.Objects
         });
-        
+
         File.WriteAllText(DataPath, serializeObject);
     }
 

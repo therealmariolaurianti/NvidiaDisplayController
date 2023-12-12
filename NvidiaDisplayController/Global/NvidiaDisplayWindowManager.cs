@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Windows.Forms;
+using Caliburn.Micro;
 using NvidiaDisplayController.Interface.Help;
 using NvidiaDisplayController.Interface.ProfileNames;
 using NvidiaDisplayController.Objects.Factories;
@@ -35,5 +36,10 @@ public class NvidiaDisplayWindowManager
     {
         var viewModel = _profileNameViewModelFactory.Create();
         return _windowManager.ShowDialogAsync(viewModel).Result is true ? viewModel : null;
+    }
+
+    public void ShowMessageBox(string message)
+    {
+        MessageBox.Show(message);
     }
 }

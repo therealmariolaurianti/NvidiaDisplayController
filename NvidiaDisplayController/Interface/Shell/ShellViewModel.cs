@@ -218,6 +218,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         {
             _logger.Error("Failed to load nvidia displays.");
             _logger.Error(e);
+
+            _nvidiaDisplayWindowManager.ShowMessageBox(
+                "Failed to load displays connected to GPU. Make sure screen is not being duplicated and or is connected to GPU.");
         }
     }
 

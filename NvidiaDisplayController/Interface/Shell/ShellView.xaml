@@ -117,7 +117,7 @@
             Grid.Row="2">
             <GroupBox.Header>
                 <TextBlock
-                    Text="Profiles"
+                    Text="{Binding ProfileGroupBoxText}"
                     FontWeight="SemiBold"
                     Margin="2" />
             </GroupBox.Header>
@@ -150,8 +150,8 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
                 <Button
-                    Name="AddNewProfile"
-                    Visibility="{calcBinding:Binding CanAddNewProfile, FalseToVisibility=Hidden}"
+                    Name="AddProfile"
+                    Visibility="{calcBinding:Binding CanAddProfile, FalseToVisibility=Hidden}"
                     Grid.Column="1"
                     Background="Transparent"
                     BorderThickness="0"
@@ -175,6 +175,7 @@
             </GroupBox.Header>
             <ContentControl
                 VerticalAlignment="Center"
+                HorizontalAlignment="Center"
                 Margin="0,0,2,2"
                 cm:View.Model="{Binding SelectedProfile.ProfileSettings}"
                 IsTabStop="False" />

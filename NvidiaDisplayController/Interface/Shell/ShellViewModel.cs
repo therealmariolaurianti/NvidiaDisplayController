@@ -94,7 +94,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             _selectedMonitor = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(nameof(SelectedProfile));
-            NotifyOfPropertyChange(nameof(CanAddNewProfile));
+            NotifyOfPropertyChange(nameof(CanAddProfile));
+            NotifyOfPropertyChange(nameof(ProfileGroupBoxText));
         }
     }
 
@@ -123,7 +124,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     }
 
     public bool CanApply => SelectedProfile is not null;
-    public bool CanAddNewProfile => SelectedMonitor is not null && SelectedMonitor.Profiles.Count < 5;
+    public bool CanAddProfile => SelectedMonitor is not null && SelectedMonitor.Profiles.Count < 5;
 
     public bool IsStartWithWindows
     {
@@ -171,6 +172,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             NotifyOfPropertyChange();
         }
     }
+
+    public string ProfileGroupBoxText =>
+        $"Profiles [{(SelectedMonitor == null ? 0 : SelectedMonitor.Profiles.Count)}/5]";
 
     public async Task HandleAsync(ProfileSettingsEvent message, CancellationToken cancellationToken)
     {
@@ -261,7 +265,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SelectedMonitor.Monitor.Profiles.Remove(profileViewModel.Profile);
         SelectedMonitor?.Profiles.Remove(profileViewModel);
 
-        NotifyOfPropertyChange(nameof(CanAddNewProfile));
+        NotifyOfPropertyChange(nameof(CanAddProfile));
+        NotifyOfPropertyChange(nameof(ProfileGroupBoxText));
 
         Write();
     }
@@ -295,7 +300,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             monitor.IsEnabled = isEnabled;
     }
 
-    public void AddNewProfile()
+    public void AddProfile()
     {
         var result = _nvidiaDisplayWindowManager.OpenProfileNameViewModel();
         if (result is null)
@@ -311,7 +316,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SelectedProfile = profileViewModel;
         SelectedProfile.IsSelected = true;
 
-        NotifyOfPropertyChange(nameof(CanAddNewProfile));
+        NotifyOfPropertyChange(nameof(CanAddProfile));
+        NotifyOfPropertyChange(nameof(ProfileGroupBoxText));
 
         Write();
     }

@@ -74,7 +74,8 @@
                     Text="Built With:" />
                 <TextBlock
                     Grid.Column="1">
-                    <Hyperlink Command="{Binding OpenWebsiteCommand}" CommandParameter="https://mahapps.com/docs/guides/quick-start">
+                    <Hyperlink Command="{Binding OpenWebsiteCommand}"
+                               CommandParameter="https://mahapps.com/docs/guides/quick-start">
                         <TextBlock Text="MahApps" />
                     </Hyperlink>
                 </TextBlock>
@@ -83,7 +84,8 @@
                     Text=", " />
                 <TextBlock
                     Grid.Column="3">
-                    <Hyperlink Command="{Binding OpenWebsiteCommand}" CommandParameter="https://www.flaticon.com/free-icons/computer">
+                    <Hyperlink Command="{Binding OpenWebsiteCommand}"
+                               CommandParameter="https://www.flaticon.com/free-icons/computer">
                         <TextBlock Text="Freepik" />
                     </Hyperlink>
                 </TextBlock>
@@ -92,7 +94,8 @@
                     Text=", " />
                 <TextBlock
                     Grid.Column="5">
-                    <Hyperlink Command="{Binding OpenWebsiteCommand}" CommandParameter="https://github.com/falahati/WindowsDisplayAPI">
+                    <Hyperlink Command="{Binding OpenWebsiteCommand}"
+                               CommandParameter="https://github.com/falahati/WindowsDisplayAPI">
                         <TextBlock Text="WindowsDisplayApi" />
                     </Hyperlink>
                 </TextBlock>

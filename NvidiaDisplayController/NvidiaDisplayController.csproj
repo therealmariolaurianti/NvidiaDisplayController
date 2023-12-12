@@ -18,10 +18,10 @@
         <PackageReference Include="Ninject" Version="3.3.6"/>
         <PackageReference Include="ninject.extensions.conventions" Version="3.3.0"/>
         <PackageReference Include="Ninject.Extensions.Factory" Version="3.3.3"/>
-        <PackageReference Include="NLog" Version="5.2.7" />
-        <PackageReference Include="NLog.Config" Version="4.7.15" />
+        <PackageReference Include="NLog" Version="5.2.7"/>
+        <PackageReference Include="NLog.Config" Version="4.7.15"/>
         <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101"/>
-        <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+        <PackageReference Include="Prism.Wpf" Version="8.1.97"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -43,9 +43,9 @@
             <SubType>Designer</SubType>
         </Page>
         <Page Update="Interface\Resources.xaml">
-          <Generator>MSBuild:Compile</Generator>
-          <XamlRuntime>Wpf</XamlRuntime>
-          <SubType>Designer</SubType>
+            <Generator>MSBuild:Compile</Generator>
+            <XamlRuntime>Wpf</XamlRuntime>
+            <SubType>Designer</SubType>
         </Page>
     </ItemGroup>
 
@@ -55,7 +55,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Compile>
         <None Update="Resources\desktop.ico">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
@@ -66,7 +66,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Resource Include="Resources\desktop.png" />
+        <Resource Include="Resources\desktop.png"/>
     </ItemGroup>
 
 </Project>

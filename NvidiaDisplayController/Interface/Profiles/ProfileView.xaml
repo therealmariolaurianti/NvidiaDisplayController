@@ -24,7 +24,7 @@
                 VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock
                     Text="{Binding Name}"

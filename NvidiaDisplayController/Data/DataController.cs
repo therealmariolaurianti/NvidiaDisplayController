@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using NvidiaDisplayController.Objects;
@@ -37,10 +35,11 @@ public class DataController
         using StreamReader reader = new(DataPath);
         {
             var json = reader.ReadToEnd();
-            var computers = JsonConvert.DeserializeObject<Computer>(json);
+
+            var computer = JsonConvert.DeserializeObject<Computer>(json);
             reader.Close();
-            
-            return computers;
+
+            return computer;
         }
     }
 }

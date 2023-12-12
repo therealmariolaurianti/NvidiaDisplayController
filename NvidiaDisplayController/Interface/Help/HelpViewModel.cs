@@ -28,7 +28,7 @@ public class HelpViewModel : Screen
 
     private void MyAction(object website)
     {
-        if(website is string websiteValue)
+        if (website is string websiteValue)
             WebsiteLauncher.OpenWebsite(websiteValue);
     }
 }

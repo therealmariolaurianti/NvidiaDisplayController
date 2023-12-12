@@ -297,9 +297,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SelectedMonitor?.Profiles.Add(profileViewModel);
         SelectedProfile = profileViewModel;
         SelectedProfile.IsSelected = true;
-        
+
         NotifyOfPropertyChange(nameof(CanAddNewProfile));
-        
+
         Write();
     }
 
@@ -309,7 +309,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             SelectedMonitor!.Display,
             SelectedProfile!.ProfileSettings.ProfileSetting,
             SelectedNvidiaMonitor);
-        
+
         SetActiveProfile();
         Write();
 

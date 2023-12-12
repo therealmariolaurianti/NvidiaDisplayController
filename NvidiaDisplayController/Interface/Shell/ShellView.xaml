@@ -195,7 +195,7 @@
                 Grid.Column="0"
                 Width="75"
                 Margin="5"
-                Content="Apply"/>
+                Content="Apply" />
             <Button
                 Name="Update"
                 IsEnabled="{Binding ProfileSettingsIsDirty}"

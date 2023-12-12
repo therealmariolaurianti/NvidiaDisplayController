@@ -26,6 +26,8 @@ public class Bootstrapper : BootstrapperBase
 
     public Bootstrapper()
     {
+        CheckIfApplicationIsRunning();
+        
         _kernel = new StandardKernel();
         _kernel.Load(Assembly.GetExecutingAssembly());
 
@@ -56,8 +58,6 @@ public class Bootstrapper : BootstrapperBase
 
     protected override void OnStartup(object sender, StartupEventArgs e)
     {
-        CheckIfApplicationIsRunning();
-
         _kernel.Bind<IWindowManager>().To<WindowManager>();
         _kernel.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
         _kernel.Bind<ILogger>().ToConstant(LogManager.GetCurrentClassLogger()).InSingletonScope();

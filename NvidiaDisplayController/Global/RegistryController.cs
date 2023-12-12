@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows.Forms;
 using Microsoft.Win32;
 
 namespace NvidiaDisplayController.Global;
@@ -18,7 +19,7 @@ public class RegistryController
         {
             var processModule = Process.GetCurrentProcess().MainModule;
             if (processModule != null)
-                registryKey.SetValue(NvidiaDisplayController, processModule.FileName);
+                registryKey.SetValue(NvidiaDisplayController, Application.ExecutablePath);
         }
         else
             registryKey.DeleteValue(NvidiaDisplayController);

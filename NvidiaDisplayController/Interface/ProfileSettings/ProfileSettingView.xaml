@@ -46,12 +46,12 @@
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
+                Margin="5,0,0,0"
                 Text=" + " />
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
-                Text="{Binding Brightness, StringFormat=p0}"
-                Margin="5,0,0,0" />
+                Text="{Binding Brightness, StringFormat=p0}" />
         </StackPanel>
         <Label
             Grid.Row="1"
@@ -78,12 +78,12 @@
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
+                Margin="5,0,0,0"
                 Text=" + " />
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
-                Text="{Binding Contrast, StringFormat=p0}"
-                Margin="5,0,0,0" />
+                Text="{Binding Contrast, StringFormat=p0}" />
         </StackPanel>
         <Label
             Grid.Row="2"
@@ -110,12 +110,12 @@
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
+                Margin="5,0,0,0"
                 Text=" + " />
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
-                Text="{Binding Gamma, StringFormat=n2}"
-                Margin="5,0,0,0" />
+                Text="{Binding Gamma, StringFormat=n2}"/>
         </StackPanel>
         <Label
             Grid.Row="0"
@@ -142,12 +142,12 @@
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
+                Margin="5,0,0,0"
                 Text=" + " />
             <TextBlock
                 TextAlignment="Center"
                 VerticalAlignment="Center"
-                Text="{Binding DigitalVibrance, StringFormat=p0}"
-                Margin="5,0,0,0" />
+                Text="{Binding DigitalVibrance, StringFormat=p0}" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -13,9 +13,9 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
 
     public ProfileSettingViewModel(ProfileSetting profileSetting, bool isDefault, IEventAggregator eventAggregator)
     {
-        IsDefault = isDefault;
         _eventAggregator = eventAggregator;
         ProfileSetting = profileSetting;
+        IsDefault = isDefault;
 
         SetOriginalSettings(profileSetting);
         _eventAggregator.SubscribeOnPublishedThread(this);

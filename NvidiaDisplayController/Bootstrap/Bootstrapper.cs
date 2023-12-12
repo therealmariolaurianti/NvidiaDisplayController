@@ -9,6 +9,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
 using NvAPIWrapper;
+using NvAPIWrapper.GPU;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Interface.Shell;
 using NvidiaDisplayController.Objects;

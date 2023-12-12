@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using NLog;
 using NvAPIWrapper.Display;
+using NvAPIWrapper.GPU;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Interface.Monitors;
@@ -76,7 +77,11 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     public override string DisplayName
     {
-        get => "Adjust Displays";
+        get
+        {
+            var gpus = PhysicalGPU.GetPhysicalGPUs();
+            return $"Adjust Displays - ({gpus[0].FullName})";
+        }
         set { }
     }
 
@@ -266,6 +271,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private void OnMonitorViewModelIsSelectedChanged(bool isSelected, Guid selectedMonitor)
     {
         SetMonitorState(selectedMonitor, !isSelected);
+
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
         SelectedNvidiaMonitor =
             _nvidiaDisplays?.SingleOrDefault(d => d.Name == SelectedMonitor?.Display.DisplayScreen.ScreenName);

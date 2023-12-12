@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -9,7 +10,6 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
 using NvAPIWrapper;
-using NvAPIWrapper.GPU;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Interface.Shell;
 using NvidiaDisplayController.Objects;
@@ -56,6 +56,8 @@ public class Bootstrapper : BootstrapperBase
 
     protected override void OnStartup(object sender, StartupEventArgs e)
     {
+        CheckIfApplicationIsRunning();
+
         _kernel.Bind<IWindowManager>().To<WindowManager>();
         _kernel.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
         _kernel.Bind<ILogger>().ToConstant(LogManager.GetCurrentClassLogger()).InSingletonScope();
@@ -69,6 +71,16 @@ public class Bootstrapper : BootstrapperBase
         TryLoad();
 
         DisplayRootViewForAsync<ShellViewModel>();
+    }
+
+    private static void CheckIfApplicationIsRunning()
+    {
+        var thisProc = Process.GetCurrentProcess();
+        if (Process.GetProcessesByName(thisProc.ProcessName).Length <= 1)
+            return;
+
+        MessageBox.Show("Application is already running.");
+        Application.Current.Shutdown(); 
     }
 
     private void TryStartNvidia()

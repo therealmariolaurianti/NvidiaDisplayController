@@ -1,37 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using Microsoft.Win32;
 using NLog;
+using NvAPIWrapper.Display;
 using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Global;
-using NvidiaDisplayController.Interface.Help;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
-using WindowsDisplayAPI;
-using Display = NvAPIWrapper.Display.Display;
 
 namespace NvidiaDisplayController.Interface.Shell;
 
 public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 {
     private readonly DataController _dataController;
+    private readonly DisplayController _displayController;
     private readonly IEventAggregator _eventAggregator;
-
-    private readonly IHelpViewModelFactory _helpViewModelFactory;
     private readonly ILogger _logger;
     private readonly MonitorViewModelFactory _monitorViewModelFactory;
+
+    private readonly NvidiaDisplayWindowManager _nvidiaDisplayWindowManager;
     private readonly ProfileFactory _profileFactory;
-    private readonly IProfileNameViewModelFactory _profileNameViewModelFactory;
     private readonly IProfileViewModelFactory _profileViewModelFactory;
-    private readonly WindowManager _windowManager;
+
+    private readonly RegistryController _registryController;
     private Computer _computer;
     private ObservableCollection<MonitorViewModel> _monitors;
     private List<Display> _nvidiaDisplays;
@@ -43,20 +40,23 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     public ShellViewModel(
         IEventAggregator eventAggregator,
         MonitorViewModelFactory monitorViewModelFactory,
-        DataController dataController, IProfileViewModelFactory profileViewModelFactory, ProfileFactory profileFactory,
-        WindowManager windowManager, IProfileNameViewModelFactory profileNameViewModelFactory,
-        IHelpViewModelFactory helpViewModelFactory,
-        ILogger logger)
+        DataController dataController,
+        IProfileViewModelFactory profileViewModelFactory,
+        ProfileFactory profileFactory,
+        ILogger logger,
+        DisplayController displayController,
+        NvidiaDisplayWindowManager nvidiaDisplayWindowManager,
+        RegistryController registryController)
     {
         _eventAggregator = eventAggregator;
         _monitorViewModelFactory = monitorViewModelFactory;
         _dataController = dataController;
         _profileViewModelFactory = profileViewModelFactory;
         _profileFactory = profileFactory;
-        _windowManager = windowManager;
-        _profileNameViewModelFactory = profileNameViewModelFactory;
-        _helpViewModelFactory = helpViewModelFactory;
         _logger = logger;
+        _displayController = displayController;
+        _nvidiaDisplayWindowManager = nvidiaDisplayWindowManager;
+        _registryController = registryController;
 
         _eventAggregator.SubscribeOnPublishedThread(this);
 
@@ -167,8 +167,6 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         }
     }
 
-    private static string NvidiaDisplayController => "NvidiaDisplayController";
-
     public async Task HandleAsync(ProfileSettingsEvent message, CancellationToken cancellationToken)
     {
         ProfileSettingsIsDirty = message.IsDirty;
@@ -177,17 +175,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     private void OnIsStartWithWindowsChanged()
     {
-        var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-        if (IsStartWithWindows)
-        {
-            var processModule = Process.GetCurrentProcess().MainModule;
-            if (processModule != null)
-                registryKey?.SetValue(NvidiaDisplayController, processModule.FileName);
-        }
-        else
-        {
-            registryKey?.DeleteValue(NvidiaDisplayController);
-        }
+        _registryController.RegisterForStartWithWindows(IsStartWithWindows);
     }
 
     private void Start()
@@ -205,7 +193,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
             Monitors.Add(monitorViewModel);
         }
-        
+
         Computer = computer;
 
         LoadNvidiaDisplays();
@@ -233,7 +221,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
                 var nvidiaDisplay =
                     _nvidiaDisplays.SingleOrDefault(d => d.Name == monitorViewModel.Display.DisplayScreen.ScreenName);
                 if (activeProfile is not null)
-                    UpdateColorSettings(monitorViewModel.Display, activeProfile.ProfileSettings.ProfileSetting,
+                    _displayController.UpdateColorSettings(monitorViewModel.Display,
+                        activeProfile.ProfileSettings.ProfileSetting,
                         nvidiaDisplay);
             }
     }
@@ -295,28 +284,32 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     public void AddNewProfile()
     {
-        var viewModel = _profileNameViewModelFactory.Create();
-        var result = _windowManager.ShowDialogAsync(viewModel).Result;
-        if (result == true)
-        {
-            var profileViewModel =
-                _profileViewModelFactory.Create(_profileFactory.Create(SelectedMonitor!.Monitor,
-                    viewModel.ProfileName), SelectedMonitor);
-            WireProfileEvents(profileViewModel);
-            SelectedMonitor?.Profiles.Add(profileViewModel);
-            Write();
+        var result = _nvidiaDisplayWindowManager.OpenProfileNameViewModel();
+        if (result is null)
+            return;
 
-            SelectedProfile = profileViewModel;
-            SelectedProfile.IsSelected = true;
+        var profileViewModel =
+            _profileViewModelFactory.Create(_profileFactory.Create(SelectedMonitor!.Monitor,
+                result.ProfileName), SelectedMonitor);
 
-            NotifyOfPropertyChange(nameof(CanAddNewProfile));
-        }
+        WireProfileEvents(profileViewModel);
+
+        SelectedMonitor?.Profiles.Add(profileViewModel);
+        SelectedProfile = profileViewModel;
+        SelectedProfile.IsSelected = true;
+        
+        NotifyOfPropertyChange(nameof(CanAddNewProfile));
+        
+        Write();
     }
 
     public void Apply()
     {
-        UpdateColorSettings(SelectedMonitor!.Display, SelectedProfile!.ProfileSettings.ProfileSetting,
+        _displayController.UpdateColorSettings(
+            SelectedMonitor!.Display,
+            SelectedProfile!.ProfileSettings.ProfileSetting,
             SelectedNvidiaMonitor);
+        
         SetActiveProfile();
         Write();
 
@@ -344,23 +337,13 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         ProfileSettingsIsDirty = false;
     }
 
-    private void UpdateColorSettings(WindowsDisplayAPI.Display display, ProfileSetting profileSetting,
-        Display? nvidiaMonitor)
-    {
-        display.GammaRamp =
-            new DisplayGammaRamp(profileSetting.Brightness, profileSetting.Contrast, profileSetting.Gamma);
-        if (nvidiaMonitor is not null)
-            nvidiaMonitor.DigitalVibranceControl.NormalizedLevel = profileSetting.DigitalVibrance - .3;
-    }
-
     public void OpenHelp()
     {
-        var viewModel = _helpViewModelFactory.Create();
-        _windowManager.ShowDialogAsync(viewModel);
+        _nvidiaDisplayWindowManager.OpenHelp();
     }
 
     public void OpenDonation()
     {
-        WebsiteLauncher.OpenWebsite("https://www.paypal.com/donate/?hosted_button_id=FT6HS8V8R4XYC");
+        _nvidiaDisplayWindowManager.OpenWebsite("https://www.paypal.com/donate/?hosted_button_id=FT6HS8V8R4XYC");
     }
 }

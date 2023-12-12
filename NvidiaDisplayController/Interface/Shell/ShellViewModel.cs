@@ -31,7 +31,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private readonly RegistryController _registryController;
     private Computer _computer;
     private ObservableCollection<MonitorViewModel> _monitors;
-    private List<Display> _nvidiaDisplays;
+    private List<Display>? _nvidiaDisplays;
     private bool _profileSettingsIsDirty;
     private MonitorViewModel? _selectedMonitor;
     private Display? _selectedNvidiaMonitor;
@@ -223,7 +223,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             {
                 var activeProfile = monitorViewModel.Profiles.SingleOrDefault(p => p.IsActive);
                 var nvidiaDisplay =
-                    _nvidiaDisplays.SingleOrDefault(d => d.Name == monitorViewModel.Display.DisplayScreen.ScreenName);
+                    _nvidiaDisplays?.SingleOrDefault(d => d.Name == monitorViewModel.Display.DisplayScreen.ScreenName);
                 if (activeProfile is not null)
                     _displayController.UpdateColorSettings(monitorViewModel.Display,
                         activeProfile.ProfileSettings.ProfileSetting,
@@ -268,7 +268,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SetMonitorState(selectedMonitor, !isSelected);
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
         SelectedNvidiaMonitor =
-            _nvidiaDisplays.SingleOrDefault(d => d.Name == SelectedMonitor?.Display.DisplayScreen.ScreenName);
+            _nvidiaDisplays?.SingleOrDefault(d => d.Name == SelectedMonitor?.Display.DisplayScreen.ScreenName);
 
         SetSelectedProfile();
     }

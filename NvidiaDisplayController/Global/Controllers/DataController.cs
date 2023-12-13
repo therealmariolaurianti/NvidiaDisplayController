@@ -21,7 +21,7 @@ public class DataController
         }
     }
 
-    public void Write(object? data)
+    public void Write(Computer data)
     {
         var serializeObject = JsonConvert.SerializeObject(data, new JsonSerializerSettings
         {

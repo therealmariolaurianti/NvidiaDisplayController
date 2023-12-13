@@ -128,7 +128,7 @@ public class Bootstrapper : BootstrapperBase
                 return Start();
             }
 
-            return Log(new Exception(), "Failed to load data.");
+            return Result.Ok();
         }
         catch (Exception e)
         {

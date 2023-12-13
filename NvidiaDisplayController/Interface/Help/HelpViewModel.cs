@@ -39,7 +39,9 @@ public class HelpViewModel : Screen
 
     public void Reset()
     {
-        _dataController.Write(string.Empty);
+        return;
+        
+        _dataController.Write(null);
 
         Application.Restart();
         System.Windows.Application.Current.Shutdown();

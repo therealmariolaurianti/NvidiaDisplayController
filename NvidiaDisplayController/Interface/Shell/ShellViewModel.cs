@@ -123,7 +123,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         }
     }
 
-    public bool CanApply => SelectedProfile is not null;
+    public bool CanApply => SelectedProfile?.ProfileSettings != null;
     public bool CanAddProfile => SelectedMonitor is not null && SelectedMonitor.Profiles.Count < 5;
 
     public bool IsStartWithWindows
@@ -238,7 +238,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
                     _nvidiaDisplays?.SingleOrDefault(d => d.Name == monitorViewModel.Display.DisplayScreen.ScreenName);
                 if (activeProfile is not null)
                     _displayController.UpdateColorSettings(monitorViewModel.Display,
-                        activeProfile.ProfileSettings.ProfileSetting,
+                        activeProfile.ProfileSettings!.ProfileSetting,
                         nvidiaDisplay);
             }
     }
@@ -258,10 +258,13 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
                 profileViewModel.UnSelect();
         }
         else
+        {
             foreach (var profileViewModel in SelectedMonitor!.Profiles)
                 profileViewModel.UnSelect();
+        }
 
         ProfileSettingsIsDirty = false;
+        NotifyOfPropertyChange(nameof(CanApply));
     }
 
     private void OnProfileRemoved(Guid guid)
@@ -332,7 +335,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         _displayController.UpdateColorSettings(
             SelectedMonitor!.Display,
-            SelectedProfile!.ProfileSettings.ProfileSetting,
+            SelectedProfile!.ProfileSettings!.ProfileSetting,
             SelectedNvidiaMonitor);
 
         SetActiveProfile();

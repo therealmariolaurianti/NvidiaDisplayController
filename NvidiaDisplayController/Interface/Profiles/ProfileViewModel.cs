@@ -27,7 +27,7 @@ public class ProfileViewModel : Screen
     }
 
     public Profile Profile { get; }
-    public Action<Guid> ProfileRemoved { get; set; }
+    public Action<Guid> ProfileRemoved { get; set; } = null!;
     public string Name => Profile.Name;
     public Guid Guid { get; set; }
 
@@ -42,7 +42,7 @@ public class ProfileViewModel : Screen
         }
     }
 
-    public ContextMenu ContextMenu { get; set; }
+    public ContextMenu ContextMenu { get; set; } = null!;
     public MonitorViewModel MonitorViewModel { get; set; }
 
     public new bool IsActive
@@ -72,7 +72,7 @@ public class ProfileViewModel : Screen
         }
     }
 
-    public Action<Guid, bool> IsSelectedChanged { get; set; }
+    public Action<Guid, bool> IsSelectedChanged { get; set; } = null!;
     public bool IsDefault => Profile.IsDefault;
 
     private void Start()

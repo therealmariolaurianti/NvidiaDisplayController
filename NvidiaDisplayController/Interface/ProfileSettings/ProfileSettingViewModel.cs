@@ -8,7 +8,7 @@ namespace NvidiaDisplayController.Interface.ProfileSettings;
 public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
 {
     private readonly IEventAggregator _eventAggregator;
-    private ProfileSetting _originalSettings;
+    private ProfileSetting _originalSettings = null!;
     private bool _resetting;
 
     public ProfileSettingViewModel(ProfileSetting profileSetting, bool isDefault, IEventAggregator eventAggregator)

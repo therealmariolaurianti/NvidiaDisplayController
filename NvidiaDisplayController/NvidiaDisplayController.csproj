@@ -38,10 +38,10 @@
             <XamlRuntime>Wpf</XamlRuntime>
             <SubType>Designer</SubType>
         </Page>
-        <Page Update="Interface\Resources.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <XamlRuntime>Wpf</XamlRuntime>
-            <SubType>Designer</SubType>
+        <Page Update="Resources\ResourceDictionaries\Resources.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
         </Page>
     </ItemGroup>
 
@@ -52,6 +52,9 @@
         </Compile>
         <None Update="Resources\desktop.ico">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="..\..\..\Users\Mario\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config">
+          <Link>Configs\NLog.config</Link>
         </None>
     </ItemGroup>
 

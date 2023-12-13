@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace NvidiaDisplayController.Global;
+namespace NvidiaDisplayController.Global.Controllers;
 
 public class RegistryController
 {

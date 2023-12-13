@@ -4,7 +4,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using NvidiaDisplayController.Objects;
 
-namespace NvidiaDisplayController.Data;
+namespace NvidiaDisplayController.Global.Controllers;
 
 public class DataController
 {

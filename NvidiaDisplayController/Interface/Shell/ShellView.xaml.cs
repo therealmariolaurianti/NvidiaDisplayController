@@ -6,8 +6,8 @@ using System.Windows;
 using System.Windows.Forms;
 using Caliburn.Micro;
 using Ninject;
-using NvidiaDisplayController.Data;
 using NvidiaDisplayController.Global;
+using NvidiaDisplayController.Global.Controllers;
 using Application = System.Windows.Application;
 
 namespace NvidiaDisplayController.Interface.Shell;
@@ -22,7 +22,7 @@ public partial class ShellView
         Start();
     }
 
-    [Inject] public DataController DataController { get; set; }
+    [Inject] public DataController DataController { get; set; } = null!;
 
     private void Start()
     {

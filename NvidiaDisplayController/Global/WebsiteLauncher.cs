@@ -15,20 +15,20 @@ public static class WebsiteLauncher
         return tmp.Scheme == Uri.UriSchemeHttp || tmp.Scheme == Uri.UriSchemeHttps;
     }
 
-    public static void OpenWebsite(string uri)
+    public static void OpenWebsite(string url)
     {
-        if (string.IsNullOrWhiteSpace(uri))
+        if (string.IsNullOrWhiteSpace(url))
             return;
 
-        if (!uri.StartsWith("https://"))
-            uri = uri.Insert(0, "https://");
+        if (!url.StartsWith("https://"))
+            url = url.Insert(0, "https://");
 
-        if (!IsValidUri(uri))
+        if (!IsValidUri(url))
             return;
 
         try
         {
-            Process.Start(new ProcessStartInfo(uri)
+            Process.Start(new ProcessStartInfo(url)
             {
                 UseShellExecute = true
             });

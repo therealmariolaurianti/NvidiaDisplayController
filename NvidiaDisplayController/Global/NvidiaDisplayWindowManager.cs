@@ -9,11 +9,12 @@ namespace NvidiaDisplayController.Global;
 public class NvidiaDisplayWindowManager
 {
     private readonly IHelpViewModelFactory _helpViewModelFactory;
-
     private readonly IProfileNameViewModelFactory _profileNameViewModelFactory;
     private readonly IWindowManager _windowManager;
 
-    public NvidiaDisplayWindowManager(IWindowManager windowManager, IHelpViewModelFactory helpViewModelFactory,
+    public NvidiaDisplayWindowManager(
+        IWindowManager windowManager,
+        IHelpViewModelFactory helpViewModelFactory,
         IProfileNameViewModelFactory profileNameViewModelFactory)
     {
         _windowManager = windowManager;

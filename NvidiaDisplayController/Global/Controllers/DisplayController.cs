@@ -3,15 +3,17 @@ using NLog;
 using NvidiaDisplayController.Objects;
 using WindowsDisplayAPI;
 
-namespace NvidiaDisplayController.Global;
+namespace NvidiaDisplayController.Global.Controllers;
 
 public class DisplayController
 {
     private readonly ILogger _logger;
+    private readonly NvidiaDisplayWindowManager _windowManager;
 
-    public DisplayController(ILogger logger)
+    public DisplayController(ILogger logger, NvidiaDisplayWindowManager windowManager)
     {
         _logger = logger;
+        _windowManager = windowManager;
     }
 
     public void UpdateColorSettings(Display display, ProfileSetting profileSetting,
@@ -26,8 +28,12 @@ public class DisplayController
         }
         catch (Exception e)
         {
-            _logger.Error("Failed to update color settings.");
+            var message = "Failed to update color settings.";
+
+            _logger.Error(message);
             _logger.Error(e);
+
+            _windowManager.ShowMessageBox(message);
         }
     }
 }

@@ -11,26 +11,36 @@ namespace NvidiaDisplayController.Interface.Profiles;
 
 public class ProfileViewModel : Screen
 {
+    private readonly IProfileSettingViewModelFactory _profileSettingViewModelFactory;
     private bool _callEvent;
     private bool _isSelected;
+    private ProfileSettingViewModel? _profileSettings;
 
     public ProfileViewModel(Profile profile, MonitorViewModel monitorViewModel,
         IProfileSettingViewModelFactory profileSettingViewModelFactory)
     {
+        _profileSettingViewModelFactory = profileSettingViewModelFactory;
         Profile = profile;
         MonitorViewModel = monitorViewModel;
-        Guid = Guid.NewGuid();
-        _callEvent = true;
 
-        CreateContextMenu();
-        ProfileSettings = profileSettingViewModelFactory.Create(Profile.ProfileSetting, Profile.IsDefault);
+        Start();
     }
 
     public Profile Profile { get; }
     public Action<Guid> ProfileRemoved { get; set; }
     public string Name => Profile.Name;
-    public Guid Guid { get; }
-    public ProfileSettingViewModel ProfileSettings { get; set; }
+    public Guid Guid { get; set; }
+
+    public ProfileSettingViewModel? ProfileSettings
+    {
+        get => _profileSettings;
+        set
+        {
+            if (Equals(value, _profileSettings)) return;
+            _profileSettings = value;
+            NotifyOfPropertyChange();
+        }
+    }
 
     public ContextMenu ContextMenu { get; set; }
     public MonitorViewModel MonitorViewModel { get; set; }
@@ -55,16 +65,34 @@ public class ProfileViewModel : Screen
             _isSelected = value;
             NotifyOfPropertyChange();
             if (_callEvent)
-                IsSelectedChanged.Invoke(Guid);
+            {
+                BuildProfileSettings();
+                IsSelectedChanged.Invoke(Guid, value);
+            }
         }
     }
 
-    public Action<Guid> IsSelectedChanged { get; set; }
+    public Action<Guid, bool> IsSelectedChanged { get; set; }
     public bool IsDefault => Profile.IsDefault;
+
+    private void Start()
+    {
+        Guid = Guid.NewGuid();
+        _callEvent = true;
+
+        CreateContextMenu();
+        BuildProfileSettings();
+    }
+
+    private void BuildProfileSettings()
+    {
+        ProfileSettings = _profileSettingViewModelFactory
+            .Create(Profile.ProfileSetting, Profile.IsDefault);
+    }
 
     public void IsUpdated()
     {
-        ProfileSettings.IsUpdated();
+        ProfileSettings?.IsUpdated();
     }
 
     private void CreateContextMenu()
@@ -96,6 +124,7 @@ public class ProfileViewModel : Screen
         _callEvent = false;
         {
             IsSelected = false;
+            ProfileSettings = null;
         }
         _callEvent = true;
     }

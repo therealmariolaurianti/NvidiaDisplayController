@@ -224,7 +224,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             _logger.Error(e);
 
             _nvidiaDisplayWindowManager.ShowMessageBox(
-                "Failed to load displays connected to GPU. Make sure screen is not being duplicated and or is connected to GPU.");
+                "Failed to load displays connected to GPU. Make sure screen is not being duplicated and or is connected to GPU. Some features may not function properly.");
         }
     }
 
@@ -249,11 +249,17 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         profileViewModel.ProfileRemoved += OnProfileRemoved;
     }
 
-    private void OnProfileViewModelSelectedChanged(Guid guid)
+    private void OnProfileViewModelSelectedChanged(Guid guid, bool value)
     {
-        SelectedProfile = SelectedMonitor!.Profiles.Single(p => p.Guid == guid);
-        foreach (var profileViewModel in SelectedMonitor.Profiles.Where(p => p.Guid != guid))
-            profileViewModel.UnSelect();
+        if (value)
+        {
+            SelectedProfile = SelectedMonitor!.Profiles.Single(p => p.Guid == guid);
+            foreach (var profileViewModel in SelectedMonitor.Profiles.Where(p => p.Guid != guid))
+                profileViewModel.UnSelect();
+        }
+        else
+            foreach (var profileViewModel in SelectedMonitor!.Profiles)
+                profileViewModel.UnSelect();
 
         ProfileSettingsIsDirty = false;
     }

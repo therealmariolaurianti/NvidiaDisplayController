@@ -8,7 +8,7 @@
     xmlns:help="clr-namespace:NvidiaDisplayController.Interface.Help"
     mc:Ignorable="d"
     Width="325"
-    Height="250"
+    Height="300"
     TitleCharacterCasing="Normal"
     WindowStartupLocation="CenterScreen"
     ResizeMode="NoResize"
@@ -16,90 +16,107 @@
     d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance help:HelpViewModel}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid
-            HorizontalAlignment="Center">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image
-                Source="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
-                Height="75"
-                Width="75"
-                Grid.ColumnSpan="2"
-                Margin="10"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
-            <Label
-                Grid.Row="1"
-                Grid.Column="0"
-                HorizontalAlignment="Center"
-                FontSize="25"
-                VerticalAlignment="Center"
-                FontWeight="SemiBold"
-                Content="Nvidia Display Controller" />
-        </Grid>
-        <Grid
-            VerticalAlignment="Center"
-            Grid.Row="1"
-            HorizontalAlignment="Center"
-            Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="5,0"
-                Text="Build: 1.0.0.0" />
             <Grid
+                HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Image
+                    Source="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
+                    Height="75"
+                    Width="75"
+                    Grid.ColumnSpan="2"
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    FontSize="25"
+                    VerticalAlignment="Center"
+                    FontWeight="SemiBold"
+                    Content="Nvidia Display Controller" />
+            </Grid>
+            <Grid
+                VerticalAlignment="Center"
                 Grid.Row="1"
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Center"
                 Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
                 <TextBlock
+                    Grid.Row="0"
                     Grid.Column="0"
                     Margin="5,0"
-                    Text="Built With:" />
-                <TextBlock
-                    Grid.Column="1">
-                    <Hyperlink Command="{Binding OpenWebsiteCommand}"
-                               CommandParameter="https://mahapps.com/docs/guides/quick-start">
-                        <TextBlock Text="MahApps" />
-                    </Hyperlink>
-                </TextBlock>
-                <TextBlock
-                    Grid.Column="2"
-                    Text=", " />
-                <TextBlock
-                    Grid.Column="3">
-                    <Hyperlink Command="{Binding OpenWebsiteCommand}"
-                               CommandParameter="https://www.flaticon.com/free-icons/computer">
-                        <TextBlock Text="Freepik" />
-                    </Hyperlink>
-                </TextBlock>
-                <TextBlock
-                    Grid.Column="4"
-                    Text=", " />
-                <TextBlock
-                    Grid.Column="5">
-                    <Hyperlink Command="{Binding OpenWebsiteCommand}"
-                               CommandParameter="https://github.com/falahati/WindowsDisplayAPI">
-                        <TextBlock Text="WindowsDisplayApi" />
-                    </Hyperlink>
-                </TextBlock>
+                    Text="Build: 1.0.0.0" />
+                <Grid
+                    Grid.Row="1"
+                    HorizontalAlignment="Left"
+                    Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        Margin="5,0"
+                        Text="Built With:" />
+                    <TextBlock
+                        Grid.Column="1">
+                        <Hyperlink Command="{Binding OpenWebsiteCommand}"
+                                   CommandParameter="https://mahapps.com/docs/guides/quick-start">
+                            <TextBlock Text="MahApps" />
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock
+                        Grid.Column="2"
+                        Text=", " />
+                    <TextBlock
+                        Grid.Column="3">
+                        <Hyperlink Command="{Binding OpenWebsiteCommand}"
+                                   CommandParameter="https://www.flaticon.com/free-icons/computer">
+                            <TextBlock Text="Freepik" />
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock
+                        Grid.Column="4"
+                        Text=", " />
+                    <TextBlock
+                        Grid.Column="5">
+                        <Hyperlink Command="{Binding OpenWebsiteCommand}"
+                                   CommandParameter="https://github.com/falahati/WindowsDisplayAPI">
+                            <TextBlock Text="WindowsDisplayApi" />
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
             </Grid>
         </Grid>
+        <Button
+            Name="Reset"
+            Grid.Row="1"
+            Style="{DynamicResource DarkThemeButtonStyle}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Height="30"
+            Width="75"
+            Margin="5"
+            ToolTip="Reset all data. Restarts application."
+            Content="Reset" />
     </Grid>
 </mah:MetroWindow>

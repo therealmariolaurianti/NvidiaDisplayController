@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using FluentResults;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
@@ -27,8 +28,6 @@ public class Bootstrapper : BootstrapperBase
 
     public Bootstrapper()
     {
-        CheckIfApplicationIsRunning();
-        
         _kernel = new StandardKernel();
         _kernel.Load(Assembly.GetExecutingAssembly());
 
@@ -68,77 +67,99 @@ public class Bootstrapper : BootstrapperBase
             .InheritedFrom<IFactory>()
             .BindToFactory());
 
-        TryStartNvidia();
-        TryLoad();
-
-        DisplayRootViewForAsync<ShellViewModel>();
+        CheckIfApplicationIsRunning()
+            .IfSuccess(() =>
+            {
+                _fileLogger.Info("Starting Application.");
+                TryStartNvidia()
+                    .IfSuccess(() => TryLoad()
+                        .IfSuccess(() => DisplayRootViewForAsync<ShellViewModel>()));
+            });
     }
 
-    private static void CheckIfApplicationIsRunning()
+    private Result CheckIfApplicationIsRunning()
     {
         var thisProc = Process.GetCurrentProcess();
         if (Process.GetProcessesByName(thisProc.ProcessName).Length <= 1)
-            return;
+            return Result.Ok();
 
-        MessageBox.Show("Application is already running.");
-        Application.Current.Shutdown(); 
+        var message = "Application is already running.";
+
+        _fileLogger.Info(message);
+        MessageBox.Show(message);
+        Application.Current.Shutdown();
+
+        return Result.Fail(message);
     }
 
-    private void TryStartNvidia()
+    private Result TryStartNvidia()
     {
         try
         {
             NVIDIA.Initialize();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            Log(e, "Nvidia device not found.");
+            return Log(e, "Nvidia device not found.");
         }
     }
 
-    private void Log(Exception e, string message)
+    private Result Log(Exception e, string message)
     {
         _fileLogger.Error(e);
         Execute.OnUIThread(() => MessageBox.Show(message));
         Application.Shutdown();
+
+        return Result.Fail(message);
     }
 
-    private void TryLoad()
+    private Result TryLoad()
     {
         try
         {
             var computer = _dataController.Load();
             if (computer is null)
-                Start();
+                return Start();
+            return Result.Fail("Failed to load data.");
         }
         catch (Exception e)
         {
-            Log(e, "Failed to load data.");
+            return Log(e, "Failed to load data.");
         }
     }
 
-    private void Start()
+    private Result Start()
     {
-        var computer = new Computer();
-        var displays = Display.GetDisplays();
-        var pathDisplayTargets = PathDisplayTarget.GetDisplayTargets();
-
-        var monitors = new List<Monitor>();
-        foreach (var display in displays)
+        try
         {
-            var resolution = display.DisplayScreen.CurrentSetting.Resolution;
-            var frequency = display.DisplayScreen.CurrentSetting.Frequency;
-            var displaySource = pathDisplayTargets.Single(pds => pds.DevicePath == display.DevicePath);
+            var computer = new Computer();
+            var displays = Display.GetDisplays();
+            var pathDisplayTargets = PathDisplayTarget.GetDisplayTargets();
 
-            var monitor = _monitorFactory.CreateDefault(display.DevicePath, displaySource.FriendlyName,
-                resolution, frequency);
+            var monitors = new List<Monitor>();
+            foreach (var display in displays)
+            {
+                var resolution = display.DisplayScreen.CurrentSetting.Resolution;
+                var frequency = display.DisplayScreen.CurrentSetting.Frequency;
+                var displaySource = pathDisplayTargets.Single(pds => pds.DevicePath == display.DevicePath);
 
-            monitors.Add(monitor);
+                var monitor = _monitorFactory.CreateDefault(display.DevicePath, displaySource.FriendlyName,
+                    resolution, frequency);
+
+                monitors.Add(monitor);
+            }
+
+            computer.Monitors.AddRange(monitors);
+
+            _dataController.Write(computer);
+
+            return Result.Ok();
         }
-
-        computer.Monitors.AddRange(monitors);
-
-        _dataController.Write(computer);
+        catch (Exception e)
+        {
+            return Log(e, "Failed to load data.");
+        }
     }
 
     protected override void PrepareApplication()

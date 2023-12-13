@@ -1,6 +1,9 @@
-﻿using System.Windows.Input;
+﻿using System.Diagnostics;
+using System.Reflection;
+using System.Windows.Input;
 using Caliburn.Micro;
 using NvidiaDisplayController.Global;
+using NvidiaDisplayController.Global.Controllers;
 using NvidiaDisplayController.Objects.Factories;
 using Prism.Commands;
 
@@ -13,8 +16,11 @@ public interface IHelpViewModelFactory : IFactory
 
 public class HelpViewModel : Screen
 {
-    public HelpViewModel()
+    private readonly DataController _dataController;
+
+    public HelpViewModel(DataController dataController)
     {
+        _dataController = dataController;
         OpenWebsiteCommand = new DelegateCommand<object>(MyAction, o => true);
     }
 
@@ -30,5 +36,21 @@ public class HelpViewModel : Screen
     {
         if (website is string websiteValue)
             WebsiteLauncher.OpenWebsite(websiteValue);
+    }
+
+    public void Reset()
+    {
+        _dataController.Write(null);
+
+        var process = new ProcessStartInfo
+        {
+            Arguments = "/C choice /C Y /N /D Y /T 1 & START \"\" \"" + Assembly.GetEntryAssembly()!.Location + "\"",
+            WindowStyle = ProcessWindowStyle.Hidden,
+            CreateNoWindow = true,
+            FileName = "cmd.exe"
+        };
+        
+        Process.Start(process);
+        Process.GetCurrentProcess().Kill();
     }
 }

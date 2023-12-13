@@ -79,8 +79,7 @@ public class Bootstrapper : BootstrapperBase
 
     private Result CheckIfApplicationIsRunning()
     {
-        var thisProc = Process.GetCurrentProcess();
-        if (Process.GetProcessesByName(thisProc.ProcessName).Length <= 1)
+        if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length <= 1)
         {
             _fileLogger.Info("Starting Application.");
             return Result.Ok();
@@ -90,8 +89,8 @@ public class Bootstrapper : BootstrapperBase
 
         _fileLogger.Info(message);
         MessageBox.Show(message);
-        Application.Current.Shutdown();
 
+        Application.Current.Shutdown();
         return Result.Fail(message);
     }
 
@@ -128,6 +127,7 @@ public class Bootstrapper : BootstrapperBase
                 _fileLogger.Info("Loading data.");
                 return Start();
             }
+
             return Log(new Exception(), "Failed to load data.");
         }
         catch (Exception e)

@@ -17,9 +17,10 @@ public class RegistryController
 
         if (isStartWithWindows)
         {
+            var directoryName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             var processModule = Process.GetCurrentProcess().MainModule;
             if (processModule != null)
-                registryKey.SetValue(NvidiaDisplayController, Application.ResourceAssembly.Location);
+                registryKey.SetValue(NvidiaDisplayController, directoryName);
         }
         else
         {

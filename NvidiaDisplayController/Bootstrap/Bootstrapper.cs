@@ -68,20 +68,23 @@ public class Bootstrapper : BootstrapperBase
             .BindToFactory());
 
         CheckIfApplicationIsRunning()
-            .IfSuccess(() =>
-            {
-                _fileLogger.Info("Starting Application.");
-                TryStartNvidia()
-                    .IfSuccess(() => TryLoad()
-                        .IfSuccess(() => DisplayRootViewForAsync<ShellViewModel>()));
-            });
+            .IfSuccess(() => TryStartNvidia()
+                .IfSuccess(() => TryLoad()
+                    .IfSuccess(() =>
+                    {
+                        DisplayRootViewForAsync<ShellViewModel>();
+                        _fileLogger.Info("Loaded root.");
+                    })));
     }
 
     private Result CheckIfApplicationIsRunning()
     {
         var thisProc = Process.GetCurrentProcess();
         if (Process.GetProcessesByName(thisProc.ProcessName).Length <= 1)
+        {
+            _fileLogger.Info("Starting Application.");
             return Result.Ok();
+        }
 
         var message = "Application is already running.";
 
@@ -97,6 +100,7 @@ public class Bootstrapper : BootstrapperBase
         try
         {
             NVIDIA.Initialize();
+            _fileLogger.Info("Starting Nvidia.");
             return Result.Ok();
         }
         catch (Exception e)
@@ -120,8 +124,11 @@ public class Bootstrapper : BootstrapperBase
         {
             var computer = _dataController.Load();
             if (computer is null)
+            {
+                _fileLogger.Info("Loading data.");
                 return Start();
-            return Result.Fail("Failed to load data.");
+            }
+            return Log(new Exception(), "Failed to load data.");
         }
         catch (Exception e)
         {

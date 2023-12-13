@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Forms;
+using System.Windows;
 using Microsoft.Win32;
 
 namespace NvidiaDisplayController.Global.Controllers;
@@ -14,14 +14,16 @@ public class RegistryController
         var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
         if (registryKey is null)
             throw new Exception();
-        
+
         if (isStartWithWindows)
         {
             var processModule = Process.GetCurrentProcess().MainModule;
             if (processModule != null)
-                registryKey.SetValue(NvidiaDisplayController, Application.ExecutablePath);
+                registryKey.SetValue(NvidiaDisplayController, Application.ResourceAssembly.Location);
         }
         else
+        {
             registryKey.DeleteValue(NvidiaDisplayController);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+﻿using System.Windows;
 using Caliburn.Micro;
 using NvidiaDisplayController.Interface.Help;
 using NvidiaDisplayController.Interface.ProfileNames;

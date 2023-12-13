@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Windows.Forms;
 using System.Windows.Input;
-using Caliburn.Micro;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Global.Controllers;
 using NvidiaDisplayController.Objects.Factories;
 using Prism.Commands;
+using Screen = Caliburn.Micro.Screen;
 
 namespace NvidiaDisplayController.Interface.Help;
 
@@ -40,17 +39,9 @@ public class HelpViewModel : Screen
 
     public void Reset()
     {
-        _dataController.Write(null);
+        _dataController.Write(string.Empty);
 
-        var process = new ProcessStartInfo
-        {
-            Arguments = "/C choice /C Y /N /D Y /T 1 & START \"\" \"" + Assembly.GetEntryAssembly()!.Location + "\"",
-            WindowStyle = ProcessWindowStyle.Hidden,
-            CreateNoWindow = true,
-            FileName = "cmd.exe"
-        };
-        
-        Process.Start(process);
-        Process.GetCurrentProcess().Kill();
+        Application.Restart();
+        System.Windows.Application.Current.Shutdown();
     }
 }

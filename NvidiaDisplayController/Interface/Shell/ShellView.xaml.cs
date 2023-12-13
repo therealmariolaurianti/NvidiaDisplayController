@@ -45,7 +45,7 @@ public partial class ShellView
         _notifyIcon.Visible = true;
 
         _notifyIcon.ContextMenuStrip = new ContextMenuStrip();
-        _notifyIcon.ContextMenuStrip.Items.Add("Open", null, OpenEvent);
+        _notifyIcon.ContextMenuStrip.Items.Add("Show", null, OpenEvent);
         _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
         _notifyIcon.ContextMenuStrip.Items.Add("Exit", null, ExitEvent);
 

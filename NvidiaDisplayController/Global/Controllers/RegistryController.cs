@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Windows;
+using System.Reflection;
 using Microsoft.Win32;
 
 namespace NvidiaDisplayController.Global.Controllers;
@@ -16,15 +15,8 @@ public class RegistryController
             throw new Exception();
 
         if (isStartWithWindows)
-        {
-            var directoryName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            var processModule = Process.GetCurrentProcess().MainModule;
-            if (processModule != null)
-                registryKey.SetValue(NvidiaDisplayController, directoryName);
-        }
+            registryKey.SetValue("ApplicationName", Assembly.GetEntryAssembly()?.Location!);
         else
-        {
             registryKey.DeleteValue(NvidiaDisplayController);
-        }
     }
 }

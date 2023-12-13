@@ -122,7 +122,7 @@ public class Bootstrapper : BootstrapperBase
         try
         {
             var computer = _dataController.Load();
-            if (computer is null)
+            if (computer is not null)
             {
                 _fileLogger.Info("Loading data.");
                 return Start();

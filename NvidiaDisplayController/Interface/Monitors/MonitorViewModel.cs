@@ -30,7 +30,8 @@ public class MonitorViewModel : Screen
     public string Name => Monitor.Name;
     public Size Resolution => Monitor.Resolution;
     public int Frequency => Monitor.Frequency;
-
+    public string ScreenName => Display.DisplayScreen.ScreenName;
+    
     public Action<bool, Guid> IsSelectedChanged { get; set; }
     public Guid Guid { get; }
 

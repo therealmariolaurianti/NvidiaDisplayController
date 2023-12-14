@@ -14,6 +14,7 @@ using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.Profiles;
 using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
+using Monitor = NvidiaDisplayController.Objects.Monitor;
 
 namespace NvidiaDisplayController.Interface.Shell;
 
@@ -176,10 +177,12 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     public string ProfileGroupBoxText =>
         $"Profiles [{(SelectedMonitor == null ? 0 : SelectedMonitor.Profiles.Count)}/5]";
 
-    public async Task HandleAsync(ProfileSettingsEvent message, CancellationToken cancellationToken)
+    private static string PaypalLink => "https://www.paypal.com/donate/?hosted_button_id=FT6HS8V8R4XYC";
+
+    public Task HandleAsync(ProfileSettingsEvent message, CancellationToken cancellationToken)
     {
         ProfileSettingsIsDirty = message.IsDirty;
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     private void OnIsStartWithWindowsChanged()
@@ -191,27 +194,28 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         _monitors = new ObservableCollection<MonitorViewModel>();
 
-        _dataController.Load()
+        _dataController
+            .Load()
             .IfSuccess(computer =>
             {
-                foreach (var monitor in computer!.Monitors)
-                {
-                    var monitorViewModel = _monitorViewModelFactory.Create(monitor);
-                    if (monitorViewModel is null)
-                        continue;
-
-                    foreach (var profileViewModel in monitorViewModel.Profiles)
-                        WireProfileEvents(profileViewModel);
-
-                    monitorViewModel.IsSelectedChanged += OnMonitorViewModelIsSelectedChanged;
-
-                    Monitors.Add(monitorViewModel);
-                }
-
                 Computer = computer;
+                Computer.Monitors.ForEach(BuildMonitorViewModel);
             })
             .Do(_ => LoadNvidiaDisplays())
             .Do(_ => ApplySettingsOnStart());
+    }
+
+    private void BuildMonitorViewModel(Monitor monitor)
+    {
+        _monitorViewModelFactory
+            .Create(monitor)
+            .IfSuccess(monitorViewModel =>
+            {
+                monitorViewModel.Profiles.ForEach(WireProfileEvents);
+                monitorViewModel.IsSelectedChanged += OnMonitorViewModelIsSelectedChanged;
+
+                Monitors.Add(monitorViewModel);
+            });
     }
 
     private void LoadNvidiaDisplays()
@@ -222,27 +226,30 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         }
         catch (Exception e)
         {
-            _logger.Error("Failed to load nvidia displays.");
             _logger.Error(e);
-
-            _nvidiaDisplayWindowManager.ShowMessageBox(
-                "Failed to load displays connected to GPU. Make sure screen is not being duplicated and or is connected to GPU. Some features may not function properly.");
+            _nvidiaDisplayWindowManager
+                .ShowMessageBox("Failed to load displays connected to GPU. " +
+                                "Make sure screen is not being duplicated and or is connected to GPU. " +
+                                "Some features may not function properly.");
         }
     }
 
     private void ApplySettingsOnStart()
     {
-        if (IsApplySettingsOnStart)
-            foreach (var monitorViewModel in Monitors)
-            {
-                var activeProfile = monitorViewModel.Profiles.SingleOrDefault(p => p.IsActive);
-                var nvidiaDisplay =
-                    _nvidiaDisplays?.SingleOrDefault(d => d.Name == monitorViewModel.Display.DisplayScreen.ScreenName);
-                if (activeProfile is not null)
-                    _displayController.UpdateColorSettings(monitorViewModel.Display,
-                        activeProfile.ProfileSettings!.ProfileSetting,
-                        nvidiaDisplay);
-            }
+        if (!IsApplySettingsOnStart)
+            return;
+
+        foreach (var monitorViewModel in Monitors)
+        {
+            var activeProfile = monitorViewModel.Profiles.SingleOrDefault(p => p.IsActive);
+            var nvidiaDisplay = _nvidiaDisplays?.SingleOrDefault(d => d.Name == monitorViewModel.ScreenName);
+
+            if (activeProfile is not null)
+                _displayController.UpdateColorSettings(
+                    monitorViewModel.Display,
+                    activeProfile.ProfileSettings!.ProfileSetting,
+                    nvidiaDisplay);
+        }
     }
 
     private void WireProfileEvents(ProfileViewModel profileViewModel)
@@ -292,8 +299,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SetMonitorState(selectedMonitor, !isSelected);
 
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
-        SelectedNvidiaMonitor =
-            _nvidiaDisplays?.SingleOrDefault(d => d.Name == SelectedMonitor?.Display.DisplayScreen.ScreenName);
+        SelectedNvidiaMonitor = _nvidiaDisplays?.SingleOrDefault(d => d.Name == SelectedMonitor?.ScreenName);
 
         SetSelectedProfile();
     }
@@ -313,24 +319,24 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     public void AddProfile()
     {
-        var result = _nvidiaDisplayWindowManager.OpenProfileNameViewModel();
-        if (result is null)
-            return;
+        _nvidiaDisplayWindowManager
+            .OpenProfileNameViewModel()
+            .IfSuccess(profileName =>
+            {
+                var profile = _profileFactory.Create(SelectedMonitor!.Monitor, profileName);
+                var profileViewModel = _profileViewModelFactory.Create(profile, SelectedMonitor);
 
-        var profileViewModel =
-            _profileViewModelFactory.Create(_profileFactory.Create(SelectedMonitor!.Monitor,
-                result.ProfileName), SelectedMonitor);
+                WireProfileEvents(profileViewModel);
 
-        WireProfileEvents(profileViewModel);
+                SelectedMonitor?.Profiles.Add(profileViewModel);
+                SelectedProfile = profileViewModel;
+                SelectedProfile.IsSelected = true;
 
-        SelectedMonitor?.Profiles.Add(profileViewModel);
-        SelectedProfile = profileViewModel;
-        SelectedProfile.IsSelected = true;
+                NotifyOfPropertyChange(nameof(CanAddProfile));
+                NotifyOfPropertyChange(nameof(ProfileGroupBoxText));
 
-        NotifyOfPropertyChange(nameof(CanAddProfile));
-        NotifyOfPropertyChange(nameof(ProfileGroupBoxText));
-
-        Write();
+                Write();
+            });
     }
 
     public void Apply()
@@ -374,6 +380,6 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     public void OpenDonation()
     {
-        _nvidiaDisplayWindowManager.OpenWebsite("https://www.paypal.com/donate/?hosted_button_id=FT6HS8V8R4XYC");
+        _nvidiaDisplayWindowManager.OpenWebsite(PaypalLink);
     }
 }

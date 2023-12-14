@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentResults;
 using NLog;
 using NvidiaDisplayController.Interface.Monitors;
 using WindowsDisplayAPI;
@@ -35,11 +36,11 @@ public class MonitorViewModelFactory
         }
     }
 
-    public MonitorViewModel? Create(Monitor monitor)
+    public Result<MonitorViewModel> Create(Monitor monitor)
     {
         var display = _displays.SingleOrDefault(d => d.DevicePath == monitor.DisplayDevicePath);
         if (display is null)
-            return null;
+            return Result.Fail("Can't find display.");
 
         var monitorViewModel = new MonitorViewModel(monitor, display);
 

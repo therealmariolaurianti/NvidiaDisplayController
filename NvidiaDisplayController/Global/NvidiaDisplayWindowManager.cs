@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Caliburn.Micro;
+using FluentResults;
 using NvidiaDisplayController.Interface.Help;
 using NvidiaDisplayController.Interface.ProfileNames;
 using NvidiaDisplayController.Objects.Factories;
@@ -33,10 +34,11 @@ public class NvidiaDisplayWindowManager
         WebsiteLauncher.OpenWebsite(urlString);
     }
 
-    public ProfileNameViewModel? OpenProfileNameViewModel()
+    public Result<string> OpenProfileNameViewModel()
     {
         var viewModel = _profileNameViewModelFactory.Create();
-        return _windowManager.ShowDialogAsync(viewModel).Result is true ? viewModel : null;
+        var result = _windowManager.ShowDialogAsync(viewModel);
+        return result.Result is true ? Result.Ok(viewModel.ProfileName) : Result.Fail("");
     }
 
     public void ShowMessageBox(string message)

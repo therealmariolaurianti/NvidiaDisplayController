@@ -4,8 +4,8 @@ using System.Windows.Controls;
 using Caliburn.Micro;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.ProfileSettings;
-using NvidiaDisplayController.Objects;
-using NvidiaDisplayController.Objects.Factories;
+using NvidiaDisplayController.Objects.Entities;
+using NvidiaDisplayController.Objects.Factories.Interfaces;
 
 namespace NvidiaDisplayController.Interface.Profiles;
 

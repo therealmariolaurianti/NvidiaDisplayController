@@ -2,8 +2,7 @@
 using Caliburn.Micro;
 using FluentResults;
 using NvidiaDisplayController.Interface.Help;
-using NvidiaDisplayController.Interface.ProfileNames;
-using NvidiaDisplayController.Objects.Factories;
+using NvidiaDisplayController.Objects.Factories.Interfaces;
 
 namespace NvidiaDisplayController.Global;
 

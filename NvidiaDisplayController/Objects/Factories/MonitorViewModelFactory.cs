@@ -4,6 +4,8 @@ using System.Linq;
 using FluentResults;
 using NLog;
 using NvidiaDisplayController.Interface.Monitors;
+using NvidiaDisplayController.Objects.Entities;
+using NvidiaDisplayController.Objects.Factories.Interfaces;
 using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Objects.Factories;

@@ -4,6 +4,7 @@ using System.Reflection;
 using FluentResults;
 using Newtonsoft.Json;
 using NvidiaDisplayController.Objects;
+using NvidiaDisplayController.Objects.Entities;
 
 namespace NvidiaDisplayController.Global.Controllers;
 

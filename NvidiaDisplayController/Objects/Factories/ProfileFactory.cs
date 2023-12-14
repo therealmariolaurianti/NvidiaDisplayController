@@ -1,3 +1,5 @@
+using NvidiaDisplayController.Objects.Entities;
+
 namespace NvidiaDisplayController.Objects.Factories;
 
 public class ProfileFactory

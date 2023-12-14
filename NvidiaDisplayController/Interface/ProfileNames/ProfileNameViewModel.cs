@@ -4,7 +4,7 @@ namespace NvidiaDisplayController.Interface.ProfileNames;
 
 public class ProfileNameViewModel : Screen
 {
-    private string _profileName;
+    private string _profileName = string.Empty;
 
     public override string DisplayName
     {

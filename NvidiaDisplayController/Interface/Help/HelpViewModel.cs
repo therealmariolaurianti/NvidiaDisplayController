@@ -2,16 +2,12 @@
 using System.Windows.Input;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Global.Controllers;
+using NvidiaDisplayController.Global.Extensions;
 using NvidiaDisplayController.Objects.Factories;
 using Prism.Commands;
 using Screen = Caliburn.Micro.Screen;
 
 namespace NvidiaDisplayController.Interface.Help;
-
-public interface IHelpViewModelFactory : IFactory
-{
-    HelpViewModel Create();
-}
 
 public class HelpViewModel : Screen
 {
@@ -22,7 +18,8 @@ public class HelpViewModel : Screen
     {
         _dataController = dataController;
         _computerFactory = computerFactory;
-        OpenWebsiteCommand = new DelegateCommand<object>(MyAction, o => true);
+
+        OpenWebsiteCommand = new DelegateCommand<object>(MyAction, _ => true);
     }
 
     public ICommand OpenWebsiteCommand { get; }

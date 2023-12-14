@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace NvidiaDisplayController.Global;
@@ -33,11 +32,9 @@ public static class WebsiteLauncher
                 UseShellExecute = true
             });
         }
-        catch (Win32Exception noBrowser)
+        catch (Exception)
         {
-        }
-        catch (Exception other)
-        {
+            // ignored
         }
     }
 }

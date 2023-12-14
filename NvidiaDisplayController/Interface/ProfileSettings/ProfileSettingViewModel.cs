@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using NvidiaDisplayController.Objects;
+using NvidiaDisplayController.Objects.Entities;
+using NvidiaDisplayController.Objects.HandleEvents;
 
 namespace NvidiaDisplayController.Interface.ProfileSettings;
 
@@ -73,7 +74,7 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
         }
     }
 
-    public async Task HandleAsync(RevertEvent message, CancellationToken cancellationToken)
+    public Task HandleAsync(RevertEvent message, CancellationToken cancellationToken)
     {
         _resetting = true;
         {
@@ -85,7 +86,7 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
 
         Publish(false);
 
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     private void SetOriginalSettings(ProfileSetting profileSetting)

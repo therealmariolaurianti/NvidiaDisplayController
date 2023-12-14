@@ -1,4 +1,5 @@
 using System.Drawing;
+using NvidiaDisplayController.Objects.Entities;
 
 namespace NvidiaDisplayController.Objects.Factories;
 

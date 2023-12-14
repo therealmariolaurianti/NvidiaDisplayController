@@ -1,6 +1,6 @@
 using NvidiaDisplayController.Interface.ProfileNames;
 
-namespace NvidiaDisplayController.Objects.Factories;
+namespace NvidiaDisplayController.Objects.Factories.Interfaces;
 
 public interface IProfileNameViewModelFactory : IFactory
 {

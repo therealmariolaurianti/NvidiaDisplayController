@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace NvidiaDisplayController.Objects;
+namespace NvidiaDisplayController.Objects.Entities;
 
 public class Monitor
 {

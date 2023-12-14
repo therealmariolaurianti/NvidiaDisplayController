@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using Caliburn.Micro;
 using NvidiaDisplayController.Interface.Profiles;
-using NvidiaDisplayController.Objects;
+using NvidiaDisplayController.Objects.Entities;
 using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Interface.Monitors;
@@ -18,21 +18,20 @@ public class MonitorViewModel : Screen
     {
         Monitor = monitor;
         Display = display;
-        
+
         _isEnabled = true;
         _profiles = new ObservableCollection<ProfileViewModel>();
         Guid = Guid.NewGuid();
     }
 
-    public Monitor Monitor { get; }
-    public Display Display { get; }
-
     public string Name => Monitor.Name;
     public Size Resolution => Monitor.Resolution;
     public int Frequency => Monitor.Frequency;
     public string ScreenName => Display.DisplayScreen.ScreenName;
-    
-    public Action<bool, Guid> IsSelectedChanged { get; set; }
+
+    public Monitor Monitor { get; }
+    public Display Display { get; }
+    public Action<bool, Guid>? IsSelectedChanged { get; set; }
     public Guid Guid { get; }
 
     public bool IsSelected
@@ -43,7 +42,7 @@ public class MonitorViewModel : Screen
             if (value == _isSelected) return;
             _isSelected = value;
             NotifyOfPropertyChange();
-            IsSelectedChanged.Invoke(value, Guid);
+            IsSelectedChanged?.Invoke(value, Guid);
         }
     }
 

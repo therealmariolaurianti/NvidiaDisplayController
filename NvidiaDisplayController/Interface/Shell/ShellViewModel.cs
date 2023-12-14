@@ -10,11 +10,14 @@ using NvAPIWrapper.Display;
 using NvAPIWrapper.GPU;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Global.Controllers;
+using NvidiaDisplayController.Global.Extensions;
 using NvidiaDisplayController.Interface.Monitors;
 using NvidiaDisplayController.Interface.Profiles;
-using NvidiaDisplayController.Objects;
+using NvidiaDisplayController.Objects.Entities;
 using NvidiaDisplayController.Objects.Factories;
-using Monitor = NvidiaDisplayController.Objects.Monitor;
+using NvidiaDisplayController.Objects.Factories.Interfaces;
+using NvidiaDisplayController.Objects.HandleEvents;
+using Monitor = NvidiaDisplayController.Objects.Entities.Monitor;
 
 namespace NvidiaDisplayController.Interface.Shell;
 
@@ -31,8 +34,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private readonly IProfileViewModelFactory _profileViewModelFactory;
 
     private readonly RegistryController _registryController;
-    private Computer _computer;
-    private ObservableCollection<MonitorViewModel> _monitors;
+    private Computer _computer = null!;
+    private ObservableCollection<MonitorViewModel> _monitors = null!;
     private List<Display>? _nvidiaDisplays;
     private bool _profileSettingsIsDirty;
     private MonitorViewModel? _selectedMonitor;

@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using Ninject;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Global.Controllers;
+using NvidiaDisplayController.Global.Extensions;
 using Application = System.Windows.Application;
 
 namespace NvidiaDisplayController.Interface.Shell;

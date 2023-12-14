@@ -10,11 +10,11 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
 using NvAPIWrapper;
-using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Global.Controllers;
+using NvidiaDisplayController.Global.Extensions;
 using NvidiaDisplayController.Interface.Shell;
-using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
+using NvidiaDisplayController.Objects.Factories.Interfaces;
 using LogManager = NLog.LogManager;
 
 namespace NvidiaDisplayController.Bootstrap;

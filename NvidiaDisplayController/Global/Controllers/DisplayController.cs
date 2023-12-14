@@ -1,6 +1,7 @@
 ﻿using System;
 using NLog;
 using NvidiaDisplayController.Objects;
+using NvidiaDisplayController.Objects.Entities;
 using WindowsDisplayAPI;
 
 namespace NvidiaDisplayController.Global.Controllers;

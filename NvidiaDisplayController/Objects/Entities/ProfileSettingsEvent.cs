@@ -1,4 +1,4 @@
-﻿namespace NvidiaDisplayController.Objects;
+﻿namespace NvidiaDisplayController.Objects.Entities;
 
 public class ProfileSettingsEvent
 {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -14,10 +13,7 @@ using NvAPIWrapper;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Global.Controllers;
 using NvidiaDisplayController.Interface.Shell;
-using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
-using WindowsDisplayAPI;
-using WindowsDisplayAPI.DisplayConfig;
 using LogManager = NLog.LogManager;
 
 namespace NvidiaDisplayController.Bootstrap;
@@ -34,7 +30,7 @@ public class Bootstrapper : BootstrapperBase
         Initialize();
     }
 
-    private MonitorFactory _monitorFactory => _kernel.Get<MonitorFactory>();
+    private ComputerFactory _computerFactory => _kernel.Get<ComputerFactory>();
     private DataController _dataController => _kernel.Get<DataController>();
     private ILogger _fileLogger => _kernel.Get<ILogger>();
 
@@ -121,14 +117,14 @@ public class Bootstrapper : BootstrapperBase
     {
         try
         {
-            var computer = _dataController.Load();
-            if (computer is null)
-            {
-                _fileLogger.Info("Loading data.");
-                return Start();
-            }
-
-            return Result.Ok();
+            var doIfSuccess = _dataController.Load()
+                .MapIfFail(_ =>
+                {
+                    _fileLogger.Info("Loading data.");
+                    return Start();
+                })
+                .Bind(_ => Result.Ok());
+            return doIfSuccess;
         }
         catch (Exception e)
         {
@@ -140,28 +136,10 @@ public class Bootstrapper : BootstrapperBase
     {
         try
         {
-            var computer = new Computer();
-            var displays = Display.GetDisplays();
-            var pathDisplayTargets = PathDisplayTarget.GetDisplayTargets();
-
-            var monitors = new List<Monitor>();
-            foreach (var display in displays)
-            {
-                var resolution = display.DisplayScreen.CurrentSetting.Resolution;
-                var frequency = display.DisplayScreen.CurrentSetting.Frequency;
-                var displaySource = pathDisplayTargets.Single(pds => pds.DevicePath == display.DevicePath);
-
-                var monitor = _monitorFactory.CreateDefault(display.DevicePath, displaySource.FriendlyName,
-                    resolution, frequency);
-
-                monitors.Add(monitor);
-            }
-
-            computer.Monitors.AddRange(monitors);
-
-            _dataController.Write(computer);
-
-            return Result.Ok();
+            return _computerFactory
+                .Create()
+                .IfSuccess(computer => _dataController.Write(computer))
+                .ToResult();
         }
         catch (Exception e)
         {

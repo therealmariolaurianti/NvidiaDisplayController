@@ -191,25 +191,27 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         _monitors = new ObservableCollection<MonitorViewModel>();
 
-        var computer = _dataController.Load();
-        foreach (var monitor in computer!.Monitors)
-        {
-            var monitorViewModel = _monitorViewModelFactory.Create(monitor);
-            if (monitorViewModel is null)
-                continue;
+        _dataController.Load()
+            .IfSuccess(computer =>
+            {
+                foreach (var monitor in computer!.Monitors)
+                {
+                    var monitorViewModel = _monitorViewModelFactory.Create(monitor);
+                    if (monitorViewModel is null)
+                        continue;
 
-            foreach (var profileViewModel in monitorViewModel.Profiles)
-                WireProfileEvents(profileViewModel);
+                    foreach (var profileViewModel in monitorViewModel.Profiles)
+                        WireProfileEvents(profileViewModel);
 
-            monitorViewModel.IsSelectedChanged += OnMonitorViewModelIsSelectedChanged;
+                    monitorViewModel.IsSelectedChanged += OnMonitorViewModelIsSelectedChanged;
 
-            Monitors.Add(monitorViewModel);
-        }
+                    Monitors.Add(monitorViewModel);
+                }
 
-        Computer = computer;
-
-        LoadNvidiaDisplays();
-        ApplySettingsOnStart();
+                Computer = computer;
+            })
+            .Do(_ => LoadNvidiaDisplays())
+            .Do(_ => ApplySettingsOnStart());
     }
 
     private void LoadNvidiaDisplays()

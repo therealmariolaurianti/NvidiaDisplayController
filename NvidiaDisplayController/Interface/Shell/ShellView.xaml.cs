@@ -54,16 +54,19 @@ public partial class ShellView
 
     private void BuildToolTip()
     {
-        var data = DataController.Load();
-        var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("Nvidia Display Controller");
-        foreach (var monitor in data!.Monitors)
-        {
-            var activeProfile = monitor.Profiles.Single(p => p.IsActive);
-            stringBuilder.AppendLine($"{monitor.Name} - {activeProfile.Name}");
-        }
+        DataController.Load()
+            .IfSuccess(data =>
+            {
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine("Nvidia Display Controller");
+                foreach (var monitor in data!.Monitors)
+                {
+                    var activeProfile = monitor.Profiles.Single(p => p.IsActive);
+                    stringBuilder.AppendLine($"{monitor.Name} - {activeProfile.Name}");
+                }
 
-        _notifyIcon!.Text = stringBuilder.ToString();
+                _notifyIcon!.Text = stringBuilder.ToString();
+            });
     }
 
     private void ExitEvent(object? sender, EventArgs args)

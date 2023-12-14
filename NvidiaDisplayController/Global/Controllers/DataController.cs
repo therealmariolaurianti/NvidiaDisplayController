@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using FluentResults;
 using Newtonsoft.Json;
 using NvidiaDisplayController.Objects;
 
@@ -31,7 +32,7 @@ public class DataController
         File.WriteAllText(DataPath, serializeObject);
     }
 
-    public Computer? Load()
+    public Result<Computer> Load()
     {
         using StreamReader reader = new(DataPath);
         {
@@ -40,7 +41,8 @@ public class DataController
             var computer = JsonConvert.DeserializeObject<Computer>(json);
             reader.Close();
 
-            return computer;
+            var result = computer is null ? Result.Fail(new Error("")) : Result.Ok(computer);
+            return result;
         }
     }
 }

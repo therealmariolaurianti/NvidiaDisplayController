@@ -13,6 +13,7 @@ using NvAPIWrapper;
 using NvidiaDisplayController.Global;
 using NvidiaDisplayController.Global.Controllers;
 using NvidiaDisplayController.Interface.Shell;
+using NvidiaDisplayController.Objects;
 using NvidiaDisplayController.Objects.Factories;
 using LogManager = NLog.LogManager;
 
@@ -117,14 +118,9 @@ public class Bootstrapper : BootstrapperBase
     {
         try
         {
-            var doIfSuccess = _dataController.Load()
-                .MapIfFail(_ =>
-                {
-                    _fileLogger.Info("Loading data.");
-                    return Start();
-                })
+            return _dataController.Load()
+                .IfFail(Start)
                 .Bind(_ => Result.Ok());
-            return doIfSuccess;
         }
         catch (Exception e)
         {
@@ -136,6 +132,7 @@ public class Bootstrapper : BootstrapperBase
     {
         try
         {
+            _fileLogger.Info("Loading data.");
             return _computerFactory
                 .Create()
                 .IfSuccess(computer => _dataController.Write(computer))

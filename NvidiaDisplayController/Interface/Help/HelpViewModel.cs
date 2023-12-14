@@ -15,11 +15,13 @@ public interface IHelpViewModelFactory : IFactory
 
 public class HelpViewModel : Screen
 {
+    private readonly ComputerFactory _computerFactory;
     private readonly DataController _dataController;
 
-    public HelpViewModel(DataController dataController)
+    public HelpViewModel(DataController dataController, ComputerFactory computerFactory)
     {
         _dataController = dataController;
+        _computerFactory = computerFactory;
         OpenWebsiteCommand = new DelegateCommand<object>(MyAction, o => true);
     }
 
@@ -39,9 +41,13 @@ public class HelpViewModel : Screen
 
     public void Reset()
     {
-        _dataController.Write(null);
+        _computerFactory.Create()
+            .IfSuccess(computer =>
+            {
+                _dataController.Write(computer);
 
-        Application.Restart();
-        System.Windows.Application.Current.Shutdown();
+                Application.Restart();
+                System.Windows.Application.Current.Shutdown();
+            });
     }
 }

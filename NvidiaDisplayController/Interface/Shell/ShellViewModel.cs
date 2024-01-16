@@ -299,8 +299,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
     private void OnMonitorViewModelIsSelectedChanged(bool isSelected, Guid selectedMonitor)
     {
-        SetMonitorState(selectedMonitor, !isSelected);
-
+        if (SelectedMonitor != null) 
+            SelectedMonitor.IsSelected = false;
+        
         SelectedMonitor = isSelected ? Monitors.Single(m => m.Guid == selectedMonitor) : null;
         SelectedNvidiaMonitor = _nvidiaDisplays?.SingleOrDefault(d => d.Name == SelectedMonitor?.ScreenName);
 
@@ -312,12 +313,6 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         SelectedProfile = SelectedMonitor?.Profiles.SingleOrDefault(p => p.IsActive);
         if (SelectedProfile is not null)
             SelectedProfile.IsSelected = true;
-    }
-
-    private void SetMonitorState(Guid selectedMonitor, bool isEnabled)
-    {
-        foreach (var monitor in Monitors.Where(m => m.Guid != selectedMonitor))
-            monitor.IsEnabled = isEnabled;
     }
 
     public void AddProfile()

@@ -9,7 +9,6 @@
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance monitors:MonitorViewModel}">
     <ToggleButton
         Style="{DynamicResource CustomMetroRectToggleButtonStyle}"
-        IsEnabled="{Binding IsEnabled}"
         IsChecked="{Binding IsSelected}">
         <ToggleButton.Content>
             <Grid>

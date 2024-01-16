@@ -46,17 +46,6 @@ public class MonitorViewModel : Screen
         }
     }
 
-    public bool IsEnabled
-    {
-        get => _isEnabled;
-        set
-        {
-            if (value == _isEnabled) return;
-            _isEnabled = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
     public ObservableCollection<ProfileViewModel> Profiles
     {
         get => _profiles;

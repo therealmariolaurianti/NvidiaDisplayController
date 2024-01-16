@@ -10,6 +10,9 @@
         <Company>MarioLaurianti</Company>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0.0</FileVersion>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>NvidiaDisplayControllerKey.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>true</PublicSign>
     </PropertyGroup>
 
     <ItemGroup>

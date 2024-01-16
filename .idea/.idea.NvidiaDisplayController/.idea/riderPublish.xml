@@ -4,6 +4,7 @@
     <option name="locations">
       <list>
         <option value="$PROJECT_DIR$/NvidiaDisplayController/bin/Release/net7.0-windows/publish" />
+        <option value="N:/Temp/Builds/NvidiaDisplayController/1.0.0.0/PublishFiles" />
       </list>
     </option>
   </component>

@@ -29,6 +29,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Image
                     Source="pack://application:,,,/NvidiaDisplayController;component/Resources/desktop.png"
@@ -44,8 +45,15 @@
                     HorizontalAlignment="Center"
                     FontSize="25"
                     VerticalAlignment="Center"
-                    FontWeight="SemiBold"
                     Content="Nvidia Display Controller" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    FontSize="15"
+                    VerticalAlignment="Center"
+                    FontWeight="SemiBold"
+                    Content="Mario Laurianti" />
             </Grid>
             <Grid
                 VerticalAlignment="Center"

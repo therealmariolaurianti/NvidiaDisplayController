@@ -17,9 +17,6 @@
         <Title>Windows Display API Wrapper (CCD)</Title>
         <PackageId>WindowsDisplayAPI</PackageId>
         <TargetFramework>net7.0</TargetFramework>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>WindowsDisplayAPIKey.snk</AssemblyOriginatorKeyFile>
-        <PublicSign>true</PublicSign>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <BumpLabel>dev</BumpLabel>

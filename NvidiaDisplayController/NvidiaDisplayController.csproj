@@ -10,25 +10,24 @@
         <Company>MarioLaurianti</Company>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0.0</FileVersion>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>NvidiaDisplayControllerKey.snk</AssemblyOriginatorKeyFile>
-        <PublicSign>true</PublicSign>
+        <Title>Nvidia Display Controller</Title>
+        <RepositoryUrl>https://github.com/therealmariolaurianti/NvidiaDisplayController</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CalcBinding" Version="2.5.2"/>
-        <PackageReference Include="Caliburn.Micro" Version="4.0.212"/>
+        <PackageReference Include="CalcBinding" Version="2.5.2" />
+        <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
         <PackageReference Include="FluentResults" Version="3.15.2" />
-        <PackageReference Include="MahApps.Metro" Version="2.4.10"/>
-        <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Ninject" Version="3.3.6"/>
-        <PackageReference Include="ninject.extensions.conventions" Version="3.3.0"/>
-        <PackageReference Include="Ninject.Extensions.Factory" Version="3.3.3"/>
-        <PackageReference Include="NLog" Version="5.2.7"/>
-        <PackageReference Include="NLog.Config" Version="4.7.15"/>
-        <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101"/>
-        <PackageReference Include="Prism.Wpf" Version="8.1.97"/>
+        <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+        <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Ninject" Version="3.3.6" />
+        <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />
+        <PackageReference Include="Ninject.Extensions.Factory" Version="3.3.3" />
+        <PackageReference Include="NLog" Version="5.2.7" />
+        <PackageReference Include="NLog.Config" Version="4.7.15" />
+        <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
+        <PackageReference Include="Prism.Wpf" Version="8.1.97" />
         <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
     </ItemGroup>
 
@@ -54,7 +53,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Data\Data.json"/>
+        <None Remove="Data\Data.json" />
         <Compile Include="Data\Data.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Compile>
@@ -67,17 +66,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Resources\DB-Add.ico"/>
-        <Resource Include="Resources\DB-Add.ico"/>
-        <None Remove="Resources\desktop.png"/>
+        <None Remove="Resources\DB-Add.ico" />
+        <Resource Include="Resources\DB-Add.ico" />
+        <None Remove="Resources\desktop.png" />
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="Resources\desktop.png"/>
+        <Resource Include="Resources\desktop.png" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj"/>
+        <ProjectReference Include="..\WindowsDisplayAPI-master\WindowsDisplayAPI\WindowsDisplayAPI.csproj" />
     </ItemGroup>
 
     <ItemGroup>

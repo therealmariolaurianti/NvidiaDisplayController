@@ -11,7 +11,7 @@ This is only for NVIDIA GPU's. You can enhance your display's visual quality and
 
 * Optionally, set the default profiles to apply on all monitors at start across all displays.
   
-* Minimizes to system tray to avoid clutter on taskbar.
+* Minimizes to system tray to avoid clutter on taskbar. Right click icon to open/close application once minimized.
 
 ![image](https://github.com/therealmariolaurianti/NvidiaDisplayController/assets/25336894/c20a6c1a-1cf8-43a6-a15d-16f12f4fb140)
 

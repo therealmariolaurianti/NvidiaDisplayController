@@ -71,10 +71,6 @@
             Orientation="Horizontal"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
-            <!-- <CheckBox -->
-            <!--     Name="IsStartWithWindows" -->
-            <!--     Margin="5" -->
-            <!--     Content="Start with Windows" /> -->
             <CheckBox
                 Name="IsApplySettingsOnStart"
                 Margin="10"

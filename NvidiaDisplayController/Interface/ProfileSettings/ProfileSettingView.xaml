@@ -149,5 +149,15 @@
                 VerticalAlignment="Center"
                 Text="{Binding DigitalVibrance, StringFormat=p0}" />
         </StackPanel>
+        <TextBlock
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Grid.ColumnSpan="2"
+            TextWrapping="Wrap"
+            Width="220"
+            Text="Warning: Very high and very low Brightness and Contrast values can limit the Gamma range."
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

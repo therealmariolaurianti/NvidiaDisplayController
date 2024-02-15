@@ -10,6 +10,8 @@ This is only for NVIDIA GPU's. You can enhance your display's visual quality and
 * Set a profile as the default so no need to select each time.
 
 * Optionally, set the default profiles to apply on all monitors at start across all displays.
+  
+* Minimizes to system tray to avoid clutter on taskbar.
 
 ![image](https://github.com/therealmariolaurianti/NvidiaDisplayController/assets/25336894/c20a6c1a-1cf8-43a6-a15d-16f12f4fb140)
 

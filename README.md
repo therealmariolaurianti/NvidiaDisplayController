@@ -7,7 +7,7 @@ This is only for NVIDIA GPU's. You can enhance your display's visual quality and
 
 * Save these settings as a profile to easily switch between different configurations.
 
-* Set a profile as the default so it will automatically apply each time the program is opened.
+* Set a profile as the default so no need to select each time.
 
 * Optionally, set the default profiles to apply on all monitors at start across all displays.
 

@@ -12,6 +12,7 @@
         <FileVersion>1.0.0.0</FileVersion>
         <Title>Nvidia Display Controller</Title>
         <RepositoryUrl>https://github.com/therealmariolaurianti/NvidiaDisplayController</RepositoryUrl>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
     </PropertyGroup>
 
     <ItemGroup>

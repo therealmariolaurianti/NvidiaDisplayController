@@ -5,5 +5,5 @@ namespace NvidiaDisplayController.Objects.Factories.Interfaces;
 
 public interface IProfileSettingViewModelFactory : IFactory
 {
-    ProfileSettingViewModel Create(ProfileSetting profileSetting, bool isDefault);
+    ProfileSettingViewModel Create(ProfileSetting profileSetting, bool isDefault, Profile profile);
 }

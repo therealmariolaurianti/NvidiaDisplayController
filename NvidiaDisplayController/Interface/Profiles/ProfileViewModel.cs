@@ -87,7 +87,7 @@ public class ProfileViewModel : Screen
     private void BuildProfileSettings()
     {
         ProfileSettings = _profileSettingViewModelFactory
-            .Create(Profile.ProfileSetting, Profile.IsDefault);
+            .Create(Profile.ProfileSetting, Profile.IsDefault, Profile);
     }
 
     public void IsUpdated()

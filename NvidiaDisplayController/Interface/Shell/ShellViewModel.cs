@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
 using Caliburn.Micro;
 using NLog;
 using NvAPIWrapper.Display;
@@ -41,6 +43,8 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private MonitorViewModel? _selectedMonitor;
     private Display? _selectedNvidiaMonitor;
     private ProfileViewModel? _selectedProfile;
+    private HotkeyManager? _hotkeyManager;
+    private readonly Dictionary<int, ProfileViewModel> _hotkeyToProfile = new();
 
     public ShellViewModel(
         IEventAggregator eventAggregator,
@@ -259,6 +263,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         profileViewModel.IsSelectedChanged += OnProfileViewModelSelectedChanged;
         profileViewModel.ProfileRemoved += OnProfileRemoved;
+        
+        // Register hotkey when profile is created/loaded
+        RegisterProfileHotkey(profileViewModel);
     }
 
     private void OnProfileViewModelSelectedChanged(Guid guid, bool value)
@@ -282,6 +289,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     private void OnProfileRemoved(Guid guid)
     {
         var profileViewModel = SelectedMonitor!.Profiles.Single(p => p.Guid == guid);
+
+        // Unregister hotkey before removing profile
+        UnregisterProfileHotkey(profileViewModel);
 
         SelectedMonitor.Monitor.Profiles.Remove(profileViewModel.Profile);
         SelectedMonitor?.Profiles.Remove(profileViewModel);
@@ -369,6 +379,9 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
 
         SelectedProfile!.IsUpdated();
         ProfileSettingsIsDirty = false;
+        
+        // Re-register hotkey in case it changed
+        ReregisterProfileHotkey(SelectedProfile);
     }
 
     public void OpenHelp()
@@ -379,5 +392,103 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     public void OpenDonation()
     {
         _nvidiaDisplayWindowManager.OpenWebsite(PaypalLink);
+    }
+
+    protected override void OnViewLoaded(object view)
+    {
+        base.OnViewLoaded(view);
+        InitializeHotkeyManager(view);
+    }
+
+    private void InitializeHotkeyManager(object view)
+    {
+        if (view is Window window)
+        {
+            var helper = new WindowInteropHelper(window);
+            _hotkeyManager = new HotkeyManager(helper.Handle);
+            
+            // Register hotkeys for all existing profiles
+            foreach (var monitor in Monitors)
+            {
+                foreach (var profile in monitor.Profiles)
+                {
+                    RegisterProfileHotkey(profile);
+                }
+            }
+        }
+    }
+
+    private void RegisterProfileHotkey(ProfileViewModel profileViewModel)
+    {
+        if (profileViewModel.Profile.HotkeyModifiers.HasValue && 
+            profileViewModel.Profile.HotkeyKey.HasValue &&
+            _hotkeyManager != null)
+        {
+            var hotkeyId = _hotkeyManager.RegisterHotkey(
+                profileViewModel.Profile.HotkeyModifiers.Value,
+                profileViewModel.Profile.HotkeyKey.Value,
+                () => ActivateProfile(profileViewModel));
+
+            if (hotkeyId != -1)
+            {
+                _hotkeyToProfile[hotkeyId] = profileViewModel;
+            }
+            else
+            {
+                _logger.Warn($"Failed to register hotkey for profile: {profileViewModel.Name}");
+            }
+        }
+    }
+
+    private void UnregisterProfileHotkey(ProfileViewModel profileViewModel)
+    {
+        if (_hotkeyManager != null)
+        {
+            var hotkeyId = _hotkeyToProfile.FirstOrDefault(x => x.Value == profileViewModel).Key;
+            if (hotkeyId != 0)
+            {
+                _hotkeyManager.UnregisterHotkey(hotkeyId);
+                _hotkeyToProfile.Remove(hotkeyId);
+            }
+        }
+    }
+
+    private void ReregisterProfileHotkey(ProfileViewModel profileViewModel)
+    {
+        UnregisterProfileHotkey(profileViewModel);
+        RegisterProfileHotkey(profileViewModel);
+    }
+
+    private void ActivateProfile(ProfileViewModel profileViewModel)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            try
+            {
+                var monitor = Monitors.FirstOrDefault(m => m.Profiles.Contains(profileViewModel));
+                if (monitor != null)
+                {
+                    var nvidiaDisplay = _nvidiaDisplays?.SingleOrDefault(d => d.Name == monitor.ScreenName);
+                    
+                    _displayController.UpdateColorSettings(
+                        monitor.Display,
+                        profileViewModel.ProfileSettings!.ProfileSetting,
+                        nvidiaDisplay);
+
+                    profileViewModel.IsActive = true;
+                    foreach (var otherProfile in monitor.Profiles.Where(p => p.Guid != profileViewModel.Guid))
+                    {
+                        otherProfile.Deactivate();
+                    }
+
+                    Write();
+                    GlobalEvents.UpdateToolTip.Invoke();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error activating profile via hotkey");
+            }
+        });
     }
 }

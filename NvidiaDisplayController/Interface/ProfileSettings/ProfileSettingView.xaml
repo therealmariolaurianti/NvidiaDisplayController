@@ -20,6 +20,7 @@
             <RowDefinition Height="35" />
             <RowDefinition Height="35" />
             <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <Label
             Grid.Row="0"
@@ -159,5 +160,46 @@
             Text="Warning: Very high and very low Brightness and Contrast values can limit the Gamma range."
             VerticalAlignment="Center"
             HorizontalAlignment="Center"/>
+        <Label
+            Grid.Row="3"
+            Grid.Column="0"
+            HorizontalAlignment="Right"
+            Margin="0,0,5,0"
+            VerticalAlignment="Center"
+            Content="Keyboard Shortcut" />
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Orientation="Horizontal"
+            VerticalAlignment="Center">
+            <CheckBox
+                Content="Ctrl"
+                IsChecked="{Binding IsCtrlChecked}"
+                Margin="5,0"
+                VerticalAlignment="Center"/>
+            <CheckBox
+                Content="Alt"
+                IsChecked="{Binding IsAltChecked}"
+                Margin="5,0"
+                VerticalAlignment="Center"/>
+            <CheckBox
+                Content="Shift"
+                IsChecked="{Binding IsShiftChecked}"
+                Margin="5,0"
+                VerticalAlignment="Center"/>
+            <Label Content="+" Margin="5,0" VerticalAlignment="Center"/>
+            <ComboBox
+                Width="100"
+                ItemsSource="{Binding AvailableKeys}"
+                SelectedItem="{Binding SelectedKey}"
+                VerticalAlignment="Center"/>
+            <Button
+                Content="Clear"
+                Margin="10,0"
+                Padding="10,0"
+                Command="{Binding ClearHotkeyCommand}"
+                VerticalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </UserControl>

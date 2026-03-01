@@ -10,8 +10,9 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     mc:Ignorable="d"
-    Height="580"
+    MinHeight="580"
     Width="600"
+    SizeToContent="Height"
     WindowStartupLocation="CenterScreen"
     WindowStyle="ToolWindow"
     ResizeMode="CanMinimize"
@@ -64,7 +65,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" MinHeight="130" />
-            <RowDefinition Height="175" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel

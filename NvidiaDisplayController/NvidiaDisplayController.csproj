@@ -12,6 +12,7 @@
         <FileVersion>1.0.0.0</FileVersion>
         <Title>Nvidia Display Controller</Title>
         <RepositoryUrl>https://github.com/therealmariolaurianti/NvidiaDisplayController</RepositoryUrl>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +22,7 @@
         <PackageReference Include="MahApps.Metro" Version="2.4.10" />
         <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="NHotkey.Wpf" Version="4.0.0" />
         <PackageReference Include="Ninject" Version="3.3.6" />
         <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />
         <PackageReference Include="Ninject.Extensions.Factory" Version="3.3.3" />

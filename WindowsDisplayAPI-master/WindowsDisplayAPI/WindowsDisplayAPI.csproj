@@ -31,12 +31,6 @@
         <DocumentationFile>..\Release\WindowsDisplayAPI.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference PrivateAssets="all" Include="MSBump" Version="2.3.2">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
-    <ItemGroup>
         <Content Include="readme.txt">
             <Pack>true</Pack>
             <PackagePath>\</PackagePath>

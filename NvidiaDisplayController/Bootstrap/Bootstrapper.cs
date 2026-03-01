@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -16,12 +17,38 @@ using NvidiaDisplayController.Interface.Shell;
 using NvidiaDisplayController.Objects.Factories;
 using NvidiaDisplayController.Objects.Factories.Interfaces;
 using LogManager = NLog.LogManager;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace NvidiaDisplayController.Bootstrap;
 
 public class Bootstrapper : BootstrapperBase
 {
     private readonly IKernel _kernel;
+
+    // Used for Window Management
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+    // Used for cross process communication 
+    [DllImport("user32.dll")]
+    private static extern bool PostMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+    // custom message
+    private const int WM_SHOWME = 0x0400 + 1; // WM_USER + 1
+    
+    private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+    private const int SW_RESTORE = 9;
 
     public Bootstrapper()
     {
@@ -76,19 +103,46 @@ public class Bootstrapper : BootstrapperBase
 
     private Result CheckIfApplicationIsRunning()
     {
-        if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length <= 1)
+        var currentProcess = Process.GetCurrentProcess();
+        var existingProcess = Process.GetProcessesByName(currentProcess.ProcessName)
+                                    .FirstOrDefault(p => p.Id != currentProcess.Id);
+
+        // if there's no other process of this running, we continue
+        if (existingProcess == null) return Result.Ok();
+
+        // if we find an existing process, find the window and bring it to the front
+        IntPtr foundHandle = IntPtr.Zero;
+
+        // we need to partial match since the window title changes based on GPU
+        EnumWindows((hWnd, lParam) =>
         {
-            _fileLogger.Info("Starting Application.");
-            return Result.Ok();
+            StringBuilder sb = new StringBuilder(256);
+            GetWindowText(hWnd, sb, sb.Capacity);
+            string title = sb.ToString();
+
+            if (title.StartsWith("Adjust Displays")) 
+            {
+                foundHandle = hWnd;
+                return false; 
+            }
+            return true;
+        }, IntPtr.Zero);
+
+        if (foundHandle != IntPtr.Zero)
+        {
+            _fileLogger.Info("Found existing window via partial match. Restoring...");
+            ShowWindow(foundHandle, SW_RESTORE);
+            SetForegroundWindow(foundHandle);
+
+            // we can't force the other instance to bring itself to the front
+            // tell it to do it itself
+            PostMessage(foundHandle, WM_SHOWME, IntPtr.Zero, IntPtr.Zero);
+
+            Application.Current.Shutdown();
+            return Result.Fail("Focused existing instance.");
         }
 
-        var message = "Application is already running.";
-
-        _fileLogger.Info(message);
-        MessageBox.Show(message);
-
-        Application.Current.Shutdown();
-        return Result.Fail(message);
+    return Result.Ok();
     }
 
     private Result TryStartNvidia()

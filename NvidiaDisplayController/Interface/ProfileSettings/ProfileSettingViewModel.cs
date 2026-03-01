@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Windows.Input;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Caliburn.Micro;
 using NvidiaDisplayController.Objects.Entities;
 using NvidiaDisplayController.Objects.HandleEvents;
@@ -231,9 +232,8 @@ public class ProfileSettingViewModel : Screen, IHandle<RevertEvent>
 
 public class RelayCommand : ICommand
 {
-    private readonly Action _execute;
-
-    public RelayCommand(Action execute)
+    private readonly System.Action _execute;
+    public RelayCommand(System.Action execute)
     {
         _execute = execute;
     }

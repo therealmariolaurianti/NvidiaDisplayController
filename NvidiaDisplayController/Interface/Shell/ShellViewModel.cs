@@ -19,6 +19,8 @@ using NvidiaDisplayController.Objects.Entities;
 using NvidiaDisplayController.Objects.Factories;
 using NvidiaDisplayController.Objects.Factories.Interfaces;
 using NvidiaDisplayController.Objects.HandleEvents;
+using System.Windows.Input;
+using NHotkey.Wpf;
 using Monitor = NvidiaDisplayController.Objects.Entities.Monitor;
 
 namespace NvidiaDisplayController.Interface.Shell;
@@ -405,7 +407,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
         if (view is Window window)
         {
             var helper = new WindowInteropHelper(window);
-            _hotkeyManager = new HotkeyManager(helper.Handle);
+            _hotkeyManager = HotkeyManager.Current;
             
             // Register hotkeys for all existing profiles
             foreach (var monitor in Monitors)
@@ -424,18 +426,23 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
             profileViewModel.Profile.HotkeyKey.HasValue &&
             _hotkeyManager != null)
         {
-            var hotkeyId = _hotkeyManager.RegisterHotkey(
-                profileViewModel.Profile.HotkeyModifiers.Value,
-                profileViewModel.Profile.HotkeyKey.Value,
-                () => ActivateProfile(profileViewModel));
+            try
+            {
+                var keyGesture = new KeyGesture(
+                    profileViewModel.Profile.HotkeyKey.Value,
+                    profileViewModel.Profile.HotkeyModifiers.Value);
+                
+                string hotkeyID = profileViewModel.Guid.ToString();
+                _hotkeyManager.AddOrReplace(
+                    profileViewModel.Name, 
+                    keyGesture, 
+                    (s, e) => ActivateProfile(profileViewModel)); 
 
-            if (hotkeyId != -1)
-            {
-                _hotkeyToProfile[hotkeyId] = profileViewModel;
+                _hotkeyToProfile[profileViewModel.Guid.ToString().GetHashCode()] = profileViewModel;
             }
-            else
+            catch (Exception ex)
             {
-                _logger.Warn($"Failed to register hotkey for profile: {profileViewModel.Name}");
+                _logger.Warn($"Failed to register hotkey for profile: {profileViewModel.Name}. Error: {ex.Message}");
             }
         }
     }
@@ -444,12 +451,10 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
     {
         if (_hotkeyManager != null)
         {
-            var hotkeyId = _hotkeyToProfile.FirstOrDefault(x => x.Value == profileViewModel).Key;
-            if (hotkeyId != 0)
-            {
-                _hotkeyManager.UnregisterHotkey(hotkeyId);
-                _hotkeyToProfile.Remove(hotkeyId);
-            }
+            _hotkeyManager.Remove(profileViewModel.Guid.ToString());
+            
+            var hashCode = profileViewModel.Guid.ToString().GetHashCode();
+            _hotkeyToProfile.Remove(hashCode);
         }
     }
 
@@ -472,7 +477,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
                     
                     _displayController.UpdateColorSettings(
                         monitor.Display,
-                        profileViewModel.ProfileSettings!.ProfileSetting,
+                        profileViewModel.Profile.ProfileSetting, 
                         nvidiaDisplay);
 
                     profileViewModel.IsActive = true;
@@ -481,7 +486,7 @@ public class ShellViewModel : Conductor<IScreen>, IHandle<ProfileSettingsEvent>
                         otherProfile.Deactivate();
                     }
 
-                    Write();
+                    Write(); // Save the state
                     GlobalEvents.UpdateToolTip.Invoke();
                 }
             }
